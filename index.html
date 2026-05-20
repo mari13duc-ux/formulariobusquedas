@@ -1,0 +1,2270 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solicitud de Búsqueda – Producto Terminado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f7fb; --card:#ffffff; --muted:#4b5563; --text:#111827;
+      --accent:#0284c7; --border:#d7dde8; --ok:#0f766e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #f5f7fb 0%, #eef2ff 100%);
+      color:var(--text); padding:24px;
+    }
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex; gap:16px; align-items:flex-start; justify-content:space-between; margin-bottom:18px;}
+    h1{margin:0;font-size:1.25rem;letter-spacing:.2px}
+    .subtitle{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 14px 0;
+      box-shadow: 0 10px 26px rgba(17,24,39,.10);
+    }
+    .grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px;}
+    .col-12{grid-column: span 12;}
+    .col-6{grid-column: span 6;}
+    .col-4{grid-column: span 4;}
+    .col-3{grid-column: span 3;}
+    @media (max-width: 860px){ .col-6,.col-4,.col-3{grid-column: span 12;} header{flex-direction:column} }
+
+    label{display:block;font-weight:600;margin:0 0 6px}
+    .hint{color:var(--muted);font-size:.88rem;margin-top:6px}
+    input, select, textarea{
+      width:100%; padding:10px 11px; border-radius: 10px;
+      border: 1px solid var(--border); background:#ffffff; color:var(--text); outline:none;
+    }
+    textarea{min-height:90px;resize:vertical}
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(110,231,255,.55);
+      box-shadow: 0 0 0 4px rgba(110,231,255,.12);
+    }
+    input.field-error, select.field-error, textarea.field-error {
+      border-color: #f87171 !important;
+      box-shadow: 0 0 0 3px rgba(248,113,113,.15) !important;
+    }
+    fieldset{border:1px solid var(--border); border-radius:12px; padding:12px; margin:0;}
+    legend{padding:0 8px; color:var(--accent); font-weight:700;}
+    .radio-group, .check-group{display:flex; gap:12px; flex-wrap:wrap; padding:6px 0 2px;}
+    .chip{display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--border); border-radius: 999px; background:#f3f4f6;}
+    .chip input{width:auto}
+    .chip small{color:var(--muted); line-height:1.15}
+    .table{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius: 12px; border:1px solid var(--border);}
+    .table th, .table td{padding:10px 10px; border-bottom:1px solid var(--border); vertical-align:middle;}
+    .table th{text-align:left; font-size:.92rem; color:var(--muted); background:#f3f4f6;}
+    .table tr:last-child td{border-bottom:none}
+    .inline{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .inline-nowrap{flex-wrap:nowrap;}
+    .fit-select{width:auto; min-width: 220px;}
+    .grow{flex:1;}
+    @media (max-width: 520px){ .inline-nowrap{flex-wrap:wrap;} .fit-select{min-width:0; width:100%;} .grow{width:100%;} }
+    .btnbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;}
+    button{border:1px solid var(--border); background:#f3f4f6; color:var(--text); padding:10px 12px; border-radius: 12px; cursor:pointer; font-weight:700;}
+    button.primary{border-color: rgba(110,231,255,.45); box-shadow: 0 0 0 4px rgba(110,231,255,.08) inset;}
+    button:hover{border-color: rgba(110,231,255,.35)}
+    .status{font-size:.9rem; color:var(--muted); margin-right:auto;}
+    .ok{color:var(--ok)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.92rem; white-space:pre-wrap; word-break:break-word; background:#f3f4f6;
+      border:1px solid var(--border); border-radius:12px; padding:12px; margin-top:10px;
+    }
+    .bigcheck{ width:20px; height:20px; }
+
+    /* Objetivos: centrar columnas */
+    #objetivosTable th:nth-child(2), #objetivosTable th:nth-child(3),
+    #objetivosTable td:nth-child(2), #objetivosTable td:nth-child(3){ text-align:center; }
+    #objetivosTable input[type="checkbox"]{ margin:0 auto; display:block; }
+
+    /* Tecnologías: centrar columnas */
+    #tecTable th:nth-child(2), #tecTable th:nth-child(3),
+    #tecTable td:nth-child(2), #tecTable td:nth-child(3){ text-align:center; }
+    #tecTable input[type="checkbox"]{ margin:0 auto; display:block; }
+
+    /* Género en una fila */
+    #generoGroup{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
+    #generoGroup .chip{ white-space:nowrap; }
+    @media (max-width: 860px){ #generoGroup{ flex-wrap:wrap; overflow-x:visible; } }
+  
+    #objetivosTable input.bigcheck{ display:block; margin:0 auto; width:22px; height:22px; }
+
+    .aviso-final{
+      background:#f0f9ff; border:1px solid #bae6fd; border-radius:12px;
+      padding:14px 18px; margin:14px 0; font-size:.95rem; color:#0369a1; text-align:center;
+    }
+
+    /* ── Toast notification ── */
+    #toast{
+      position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px);
+      background:#1e293b; color:#fff; padding:10px 20px; border-radius:12px;
+      font-size:.9rem; font-weight:600; z-index:9999;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      transition: transform .3s ease, opacity .3s ease;
+      opacity:0; pointer-events:none; white-space:nowrap;
+    }
+    #toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
+    #toast.toast-ok{ background:#0f766e; }
+    #toast.toast-err{ background:#b91c1c; }
+    #toast.toast-warn{ background:#b45309; }
+
+    /* ── Campo precio inline editable ── */
+    .vm-display-wrap{ display:inline-flex; align-items:center; gap:6px; }
+    .vm-editable-input{
+      width:70px; padding:2px 6px; border-radius:6px; border:1px solid var(--border);
+      font-size:.85rem; font-family:inherit; display:none;
+    }
+    .vm-editable-input.visible{ display:inline-block; }
+    .vm-edit-btn{ font-size:.78rem; padding:2px 6px; border-radius:6px; cursor:pointer; }
+    .vm-confirm-btn{ font-size:.78rem; padding:2px 6px; border-radius:6px; cursor:pointer; background:#e0f2fe; border-color:#7dd3fc; display:none; }
+    .vm-confirm-btn.visible{ display:inline-block; }
+
+    /* ── Validación: mensaje de error ── */
+    .validation-banner{
+      background:#fef2f2; border:1px solid #fecaca; border-radius:12px;
+      padding:14px 18px; margin:8px 0 14px; font-size:.92rem; color:#b91c1c; display:none;
+    }
+    .validation-banner ul{ margin:6px 0 0 16px; padding:0; }
+    .validation-banner li{ margin:3px 0; }
+
+    /* ── JSON desactualizado ── */
+    .json-stale-warning{
+      display:none; font-size:.8rem; color:#b45309; font-weight:600; margin-left:6px;
+    }
+  </style>
+</head>
+<body>
+<div id="toast"></div>
+<div class="container">
+  <header>
+    <div style="flex:1;">
+      <h1>🧩 Solicitud de búsqueda de producto terminado</h1>
+      <p class="subtitle">Usá este formulario para solicitar una nueva búsqueda de producto terminado: definí el objetivo, el precio objetivo, las tecnologías requeridas y los datos de la temporada. Una vez completado, tu solicitud será evaluada por Roxana/Ariel y confirmada por Abraham para iniciar el proceso.</p>
+    </div>
+    <div class="btnbar" style="flex-shrink:0;">
+      <span id="status" class="status">Listo.</span>
+      <button type="button" id="btnSave">💾 Guardar</button>
+      <button type="button" id="btnLoad">📂 Cargar</button>
+      <button type="button" id="btnCopy" class="primary">📋 Copiar resumen</button>
+
+    </div>
+  </header>
+
+  <form id="form">
+    <!-- ===== DATOS GENERALES ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 14px;font-size:1.05rem;">🧾 Datos generales</h2>
+
+      <!-- Fila 1: fechas y prioridad -->
+      <div class="grid" style="margin-bottom:14px;">
+        <div class="col-3">
+          <label for="fechaSolicitud">Fecha de solicitud <span style="color:#dc2626">*</span></label>
+          <input id="fechaSolicitud" name="fechaSolicitud" type="date" />
+        </div>
+
+        <div class="col-3">
+          <label for="fechaCierre">Fecha de cierre <span style="color:#dc2626">*</span></label>
+          <input id="fechaCierre" name="fechaCierre" type="date" />
+          <div class="hint">Por defecto: hoy + 3 meses.</div>
+        </div>
+
+        <div class="col-6">
+          <label>Nivel de prioridad <span style="color:#dc2626">*</span></label>
+          <div style="display:flex; gap:8px; flex-wrap:nowrap; margin-top:4px; height:39px;">
+            <label style="display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;font-weight:700;font-size:.82rem;color:#16a34a;padding:0 10px;border:2px solid #bbf7d0;border-radius:8px;background:#f0fdf4;flex:1;white-space:nowrap;height:100%;">
+              <input type="radio" name="prioridad" value="Baja" style="width:auto;accent-color:#16a34a;flex-shrink:0;" />
+              🟢 Baja
+            </label>
+            <label style="display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;font-weight:700;font-size:.82rem;color:#b8930a;padding:0 10px;border:2px solid #fde68a;border-radius:8px;background:#fefce8;flex:1;white-space:nowrap;height:100%;">
+              <input type="radio" name="prioridad" value="Media" style="width:auto;accent-color:#f1c232;flex-shrink:0;" />
+              🟡 Media
+            </label>
+            <label style="display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;font-weight:700;font-size:.82rem;color:#ea580c;padding:0 10px;border:2px solid #fed7aa;border-radius:8px;background:#fff7ed;flex:1;white-space:nowrap;height:100%;">
+              <input type="radio" name="prioridad" value="Alta" style="width:auto;accent-color:#ea580c;flex-shrink:0;" />
+              🟠 Alta
+            </label>
+            <label style="display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;font-weight:700;font-size:.82rem;color:#dc2626;padding:0 10px;border:2px solid #fecdd3;border-radius:8px;background:#fff1f2;flex:1;white-space:nowrap;height:100%;">
+              <input type="radio" name="prioridad" value="Urgente" style="width:auto;accent-color:#dc2626;flex-shrink:0;" />
+              ⚠️ Urgente
+            </label>
+          </div>
+          <div id="prioridadHint" style="display:none;margin-top:8px;font-size:.85rem;padding:8px 10px;border-radius:8px;border:1px solid var(--border);"></div>
+        </div>
+      </div>
+
+      <!-- Fila 2: rubro, tipología, clasificación, temporada en 4 columnas iguales -->
+      <div class="grid" style="margin-bottom:14px;">
+        <div class="col-3">
+          <label for="rubro">Rubro <span style="color:#dc2626">*</span></label>
+          <select id="rubro" name="rubro">
+            <option value="">— Seleccionar —</option>
+            <option value="INDUMENTARIA">INDUMENTARIA</option>
+            <option value="ACCESORIOS">ACCESORIOS</option>
+            <option value="EQUIPO OUTDOOR">EQUIPO OUTDOOR</option>
+            <option value="CALZADO">CALZADO</option>
+          </select>
+        </div>
+
+        <div class="col-3">
+          <label for="subrubro">Tipología <span style="color:#dc2626">*</span></label>
+          <select id="subrubro" name="subrubro" disabled>
+            <option value="">— Seleccionar —</option>
+          </select>
+        </div>
+
+        <div class="col-3">
+          <label for="clasifTecnica">Clasificación técnica</label>
+          <select id="clasifTecnica" name="clasifTecnica" disabled>
+            <option value="">— Seleccionar —</option>
+          </select>
+        </div>
+
+        <div class="col-3">
+          <label for="temporada">Temporada</label>
+          <select id="temporada" name="temporada" disabled>
+            <option value="">— Seleccionar —</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Género -->
+      <div class="grid" style="margin-bottom:14px;">
+        <div class="col-12">
+          <fieldset>
+            <legend>Género <span style="color:#dc2626">*</span></legend>
+            <div class="radio-group" id="generoGroup">
+              <label class="chip"><input class="bigcheck" type="checkbox" name="genero" value="Hombre" /> Hombre</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="genero" value="Mujer" /> Mujer</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="genero" value="Niños" /> Niños</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="genero" value="Unisex" /> Unisex</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- Fila 3: artículos de referencia -->
+      <div class="grid">
+        <div class="col-12">
+          <label for="articulosRef">Artículo(s) de referencia (links o nombres). Aclarar cambios deseados a priori</label>
+          <textarea id="articulosRef" name="articulosRef" placeholder="Pegá links, nombres de producto, SKU, y describí cambios deseados..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OBJETIVO DE LA BÚSQUEDA ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 8px;font-size:1.05rem;">🎯 Objetivo de la búsqueda <span style="color:#dc2626">*</span></h2>
+      <p style="margin:0 0 12px;font-size:.92rem;color:var(--muted);">Seleccioná los principales objetivos de esta búsqueda. Dejar en blanco los que no apliquen.</p>
+      <table class="table" id="objetivosTable" aria-label="Objetivo de la búsqueda">
+        <thead>
+          <tr>
+            <th>Objetivo</th>
+            <th style="width:140px; text-align:center;">Deseable</th>
+            <th style="width:140px; text-align:center;">Excluyente</th>
+          </tr>
+        </thead>
+        <tbody id="objetivosBody"></tbody>
+      </table>
+
+      <div class="grid" style="margin-top:12px;">
+        <div class="col-12" id="otroWrap" style="display:none;">
+          <label for="objetivoOtroTexto">Otro (aclarar) — máximo 70 caracteres</label>
+          <input id="objetivoOtroTexto" name="objetivoOtroTexto" type="text" maxlength="70" placeholder="Máx. 70 caracteres" />
+          <div class="hint"><span id="otroCount">0</span>/70</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRECIO OBJETIVO ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 12px;font-size:1.05rem;">💰 Precio objetivo</h2>
+      <div class="grid">
+        <div class="col-6">
+          <!-- CAMBIO 5a: Cuadro sugerencia -->
+          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.9rem;color:#92400e;">
+            💡 <b>Sugerencia:</b> Hacer un análisis de la competencia antes de definir el precio objetivo.
+          </div>
+          <label>Target price MÁXIMO <span style="color:#dc2626">*</span></label>
+          <div class="inline inline-nowrap">
+            <select id="moneda" name="moneda" aria-label="Moneda" class="fit-select">
+              <option value="USD (FOB)">USD (FOB)</option>
+              <option value="ARS (Precio Comunidad)">ARS (Precio Comunidad)</option>
+              <option value="ARS (Costo nacional con gastos)">ARS (Costo nacional con gastos)</option>
+            </select>
+            <input id="precioMax" name="precioMax" type="number" class="grow" step="0.01" min="0" placeholder="ej: 8.50" />
+          </div>
+          <div style="margin-top:10px;">
+            <label for="referenciaPrecio" style="display:flex;align-items:center;gap:6px;">
+              Referencia de precio
+              <span id="refPrecioHelp" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#e0f2fe;border:1px solid #7dd3fc;color:#0284c7;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0;" title="Indica qué referencia usaste para llegar a este precio objetivo">?</span>
+            </label>
+            <input id="referenciaPrecio" name="referenciaPrecio" type="text" placeholder="Ej: Competencia, producto actual, etc." style="max-width:400px;" />
+            <div id="refPrecioTooltip" style="display:none;margin-top:6px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:8px 12px;font-size:.87rem;color:#0369a1;">
+              ℹ️ Indica qué referencia usaste para llegar a este precio objetivo: Competencia, un producto actual, u otro motivo.
+            </div>
+          </div>
+          <!-- CAMBIO 5f: Cálculos desglosados -->
+          <div id="arsFobHint" style="margin-top:10px; display:none;">
+            <div style="font-size:.9rem;font-weight:600;margin-bottom:6px;color:var(--muted);">
+              <span id="arsFobLabel">Equivale a:</span> <b id="arsFobValue" style="color:var(--text);">—</b>
+            </div>
+            <div id="arsFobDetail" style="font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:3px;padding:8px 10px;background:#f3f4f6;border-radius:8px;border:1px solid var(--border);"></div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <fieldset>
+            <legend>Target price <span style="color:#dc2626">*</span></legend>
+            <div style="display:flex;flex-direction:column;gap:10px;padding:6px 0 2px;">
+              <label class="chip" style="border-radius:10px;">
+                <input class="bigcheck" type="checkbox" name="targetPriceTipo" value="Excluyente" id="cbExcluyente" />
+                <span><b>Excluyente</b><br><small>El precio no puede ser mayor al indicado</small></span>
+              </label>
+              <!-- CAMBIO 5c: renombrar "Flexible hacia arriba" -->
+              <label class="chip" style="border-radius:10px;">
+                <input class="bigcheck" type="checkbox" name="targetPriceTipo" value="Flexible hacia arriba: Mejorar calidad" id="cbFlexArriba" />
+                <span><b>Flexible hacia arriba: Mejorar calidad</b><br><small>Si el producto ofrece mejores prestaciones, podemos pagar un poco más</small></span>
+              </label>
+              <!-- CAMBIO 5b: campo adicional si se selecciona Flexible hacia arriba -->
+              <div id="flexArribaExtra" style="display:none;padding:4px 10px 8px 10px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;">
+                <label for="flexArribaCuanto" style="font-size:.88rem;font-weight:600;margin-bottom:4px;display:block;">¿Cuánto más estamos dispuestos a pagar?</label>
+                <input id="flexArribaCuanto" name="flexArribaCuanto" type="text" value="+5%" style="max-width:130px;" />
+              </div>
+              <!-- CAMBIO 5d: renombrar "Flexible hacia abajo" -->
+              <label class="chip" style="border-radius:10px;">
+                <input class="bigcheck" type="checkbox" name="targetPriceTipo" value="Flexible hacia abajo: Mejorar precio" />
+                <span><b>Flexible hacia abajo: Mejorar precio</b><br><small>Si el producto es más barato, podemos prescindir de algunas prestaciones</small></span>
+              </label>
+            </div>
+            <!-- CAMBIO 5e: eliminado el texto de la regla -->
+          </fieldset>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TECNOLOGÍAS Y RECURSOS ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 12px;font-size:1.05rem;">🧵 Tecnologías y recursos</h2>
+
+      <div class="grid">
+        <div class="col-12">
+          <label for="tecAclaraciones">Aclaraciones generales para afinar la búsqueda</label>
+          <textarea id="tecAclaraciones" name="tecAclaraciones" placeholder="Materialidad, composición, relleno, peso, características técnicas, etc."></textarea>
+        </div>
+
+      </div>
+
+      <table class="table" id="tecTable" aria-label="Tecnologías y recursos" style="margin-top:10px;">
+        <thead>
+          <tr>
+            <th>Ítem</th>
+            <th style="width:160px; text-align:center;">Deseable</th>
+            <th style="width:160px; text-align:center;">Obligatorio</th>
+          </tr>
+        </thead>
+        <tbody id="tecBody"></tbody>
+      </table>
+      <div class="hint">Las tecnologías marcadas se precargan automáticamente según el Rubro, Tipología, Clasificación técnica y Temporada seleccionados. Podés ajustarlas manualmente. Si no aplica, dejá sin seleccionar.</div>
+    </section>
+
+    <!-- ===== ORIGEN ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 12px;font-size:1.05rem;">🌏 Origen</h2>
+      <div class="grid">
+        <div class="col-12">
+          <fieldset>
+            <legend>Preferencia de origen</legend>
+            <div class="radio-group" id="origenGroup">
+              <!-- CAMBIO 9: Indistinto seleccionado por defecto -->
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="Indistinto" id="origenIndistinto" /> Indistinto</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="China" /> China</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="Taiwan" /> Taiwan</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="India" /> India</label>
+              <!-- CAMBIO 9: Nueva opción Sudeste asiático -->
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="Sudeste asiático" /> Sudeste asiático</label>
+              <label class="chip" title="Bangladesh, Vietnam, Indonesia, Pakistan y otros fuera de China"><input class="bigcheck" type="checkbox" name="origen" value="Bangladesh-Vietnam-Indonesia-Pakistan-Otros fuera de China" /> Otros fuera de China</label>
+              <label class="chip"><input class="bigcheck" type="checkbox" name="origen" value="Otros" /> Otros (aclarar)</label>
+            </div>
+            <div class="grid" style="margin-top:10px;">
+              <div class="col-12" id="origenOtroWrap" style="display:none;">
+                <label for="origenOtroTexto">Otros (aclarar)</label>
+                <input id="origenOtroTexto" name="origenOtroTexto" type="text" placeholder="Ej: Turquía, Corea, etc." />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CANTIDAD A COTIZAR ===== -->
+    <!-- CAMBIO 1 (complemento): sección renombrada, sin "Fecha de cierre" ni hint de "dejar en blanco" -->
+    <section class="card">
+      <h2 style="margin:0 0 8px;font-size:1.05rem;">📦 Cantidad a cotizar</h2>
+      <p style="margin:0 0 12px;font-size:.92rem;color:var(--muted);">Ingresa las cantidades que realmente necesitamos, no los mínimos del proveedor.</p>
+      <div class="grid">
+        <div class="col-12">
+          <table class="table" id="cantTable" aria-label="Cantidad a cotizar">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th style="width:260px;">Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Por color</b></td>
+                <td><input id="qtyPorColor" name="qtyPorColor" type="number" min="0" step="1" placeholder="Ej: 1000" /></td>
+              </tr>
+              <tr>
+                <td><b>Por artículo</b></td>
+                <td><input id="qtyPorArticulo" name="qtyPorArticulo" type="number" min="0" step="1" placeholder="Ej: 1000" /></td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- CAMBIO 10: eliminado el texto "Podés dejar en blanco si aún no está definido." -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROVEEDOR Y ADJUNTOS ===== -->
+    <section class="card">
+      <h2 style="margin:0 0 12px;font-size:1.05rem;">🤝 Proveedor y adjuntos</h2>
+      <div class="grid">
+        <div class="col-12">
+          <label for="proveedor">Proveedor sugerido (nombre y contacto, si aplica)</label>
+          <textarea id="proveedor" name="proveedor" placeholder="Nombre, mail, WhatsApp, web, etc."></textarea>
+        </div>
+
+        <div class="col-6">
+          <label for="adjunto">Adjuntar ficha de cotización de referencia (Opcional)</label>
+          <input id="adjunto" name="adjunto" type="file" />
+          <div class="hint">Se guarda el nombre del archivo en el JSON (el archivo no se sube a ningún lado).</div>
+        </div>
+
+        <div class="col-6">
+          <label for="adjuntoDesc">Descripción del archivo (Opcional)</label>
+          <textarea id="adjuntoDesc" name="adjuntoDesc" placeholder="Qué contiene, fecha, proveedor, etc."></textarea>
+        </div>
+
+        <!-- CAMBIO 7: casilla de muestra física -->
+        <div class="col-12">
+          <label class="chip" style="border-radius:10px;display:inline-flex;width:auto;cursor:pointer;">
+            <input class="bigcheck" type="checkbox" name="muestraFisica" id="muestraFisica" value="Sí" />
+            <span style="font-weight:600;">Contamos con una muestra física para enviar al proveedor</span>
+          </label>
+        </div>
+
+        <div class="col-12">
+          <label for="comentarios">Comentarios (Opcional)</label>
+          <textarea id="comentarios" name="comentarios"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== COTIZACIÓN ===== -->
+    <section class="card" id="cotizacionSection" style="display:none;">
+      <h2 style="margin:0 0 6px;font-size:1.05rem;">📋 Cotización</h2>
+      <p style="margin:0 0 16px;font-size:.92rem;color:var(--muted);">Estos son los datos que Comercio Exterior deberá tener en cuenta para solicitar las cotizaciones. Deberán estar completos antes de enviar una devolución a Producto.</p>
+
+      <div id="cotDatosWrap" style="margin-bottom:18px;">
+        <h3 style="margin:0 0 8px;font-size:.97rem;color:var(--text);">Datos necesarios para evaluar la cotización:</h3>
+        <div id="cotDatos" style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.91rem;line-height:1.7;min-height:40px;white-space:pre-wrap;"></div>
+      </div>
+
+      <div id="cotIncluirWrap" style="margin-bottom:18px;">
+        <h3 style="margin:0 0 8px;font-size:.97rem;color:var(--text);">La cotización debe incluir:</h3>
+        <div id="cotIncluir" style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.91rem;line-height:1.7;min-height:40px;white-space:pre-wrap;"></div>
+      </div>
+
+      <div id="cotNotasWrap">
+        <h3 style="margin:0 0 8px;font-size:.97rem;color:var(--text);">Notas:</h3>
+        <div id="cotNotas" style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.91rem;line-height:1.7;min-height:40px;white-space:pre-wrap;"></div>
+      </div>
+    </section>
+
+    <!-- CAMBIO 8: aviso final -->
+    <div class="aviso-final">
+      📋 Tu solicitud debe ser evaluada por <b>Roxana/Ariel</b> y luego confirmada por <b>Abraham</b> para iniciar el proceso de búsqueda.
+    </div>
+
+    <!-- ===== VALIDACIÓN Y ENVÍO ===== -->
+    <div id="validationBanner" class="validation-banner">
+      <b>⚠️ Hay campos requeridos incompletos:</b>
+      <ul id="validationList"></ul>
+    </div>
+
+    <section class="card">
+      <div class="btnbar">
+        <span class="status" id="submitStatus">Completá lo que tengas; podés guardar y continuar luego.</span>
+        <button type="submit" class="primary">Generar resumen</button>
+        <button type="button" id="btnSend">✉️ Enviar solicitud</button>
+      </div>
+
+      <div id="outputWrap" style="display:none;margin-top:14px;">
+        <div class="hint" style="margin-bottom:8px;">Vista previa del resumen:</div>
+        <div id="output"></div>
+      </div>
+    </section>
+  </form>
+</div>
+
+<script>
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
+
+  let isLoading = false;
+
+  function setStatus(msg, ok=false){
+    const el = $("#status");
+    el.textContent = msg;
+    if (ok) el.classList.add("ok"); else el.classList.remove("ok");
+  }
+
+  function safe(v){ return (v === undefined || v === null) ? "" : String(v).trim(); }
+
+  function formatDateISOtoDMY(iso){
+    if (!iso) return "";
+    const m = iso.match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/);
+    if (!m) return iso;
+    return m[3] + "/" + m[2] + "/" + m[1];
+  }
+
+  // ── CAMBIO 3: mensajes de prioridad ──
+  const prioridadMensajes = {
+    "Baja":    { color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0", texto:"No es indispensable para esta temporada, solo se realizará la búsqueda si la carga de trabajo lo permite." },
+    "Media":   { color:"#b8930a", bg:"#fefce8", border:"#fde68a", texto:"Sería conveniente completar esta búsqueda, pero no es indispensable para la temporada si hay búsquedas de mayor importancia pendientes." },
+    "Alta":    { color:"#ea580c", bg:"#fff7ed", border:"#fed7aa", texto:"Es importante completar esta búsqueda para evitar un impacto en nuestros costos y/o ventas." },
+    "Urgente": { color:"#dc2626", bg:"#fff1f2", border:"#fecdd3", texto:"Si no se completa esta búsqueda habrá un impacto seguro en nuestros costos y/o ventas." }
+  };
+
+  $$('input[name="prioridad"]').forEach(r => {
+    r.addEventListener("change", () => {
+      const hint = $("#prioridadHint");
+      const val = r.value;
+      const cfg = prioridadMensajes[val];
+      if (r.checked && cfg) {
+        hint.style.display = "block";
+        hint.style.background = cfg.bg;
+        hint.style.borderColor = cfg.border;
+        hint.style.color = cfg.color;
+        hint.textContent = cfg.texto;
+      } else {
+        hint.style.display = "none";
+      }
+    });
+  });
+
+  // USD oficial (venta) para cálculo ARS -> FOB (fallback si falla el fetch)
+  let usdOficialVenta = 1000; // fallback
+  async function fetchUsdOficial(){
+    try{
+      const res = await fetch("https://dolarapi.com/v1/dolares/oficial", { cache: "no-store" });
+      const data = await res.json();
+      const venta = data && typeof data.venta === "number" ? data.venta : null;
+      if (venta) usdOficialVenta = venta;
+      return usdOficialVenta;
+    }catch(e){
+      return usdOficialVenta;
+    }
+  }
+
+  // CAMBIO 5f: valor de venta mayorista editable
+  let ventaMayoristaValor = 2.5;
+
+  // ── CAMBIO 5f: cálculos desglosados ──
+  function updateArsFobHint(){
+    const moneda = $("#moneda") ? $("#moneda").value : "";
+    const raw = $("#precioMax") ? $("#precioMax").value : "";
+    const hint = $("#arsFobHint");
+    if (!hint) return;
+
+    const show = raw !== "" && (moneda === "USD (FOB)" || moneda === "ARS (Precio Comunidad)" || moneda === "ARS (Costo nacional con gastos)");
+    if (!show){ hint.style.display = "none"; return; }
+
+    const v = Number(raw);
+    if (!isFinite(v) || v < 0){
+      $("#arsFobLabel").textContent = "Equivale a:";
+      $("#arsFobValue").textContent = "—";
+      $("#arsFobDetail").innerHTML = "";
+      hint.style.display = "block";
+      return;
+    }
+
+    const usd = usdOficialVenta;
+    const vm = ventaMayoristaValor;
+
+    if (moneda === "USD (FOB)"){
+      const rubro = $("#rubro") ? $("#rubro").value : "";
+      let nacionalFactor = 1.32;
+      let nacionalLabel = "Nacionalización";
+      if (rubro === "EQUIPO OUTDOOR"){ nacionalFactor = 1.45; nacionalLabel = "Nacionalización Equipo Outdoor"; }
+      else if (rubro === "INDUMENTARIA"){ nacionalFactor = 1.32; nacionalLabel = "Nacionalización Indumentaria"; }
+      else if (rubro === "ACCESORIOS"){ nacionalFactor = 1.32; nacionalLabel = "Nacionalización Accesorios"; }
+      else if (rubro === "CALZADO"){ nacionalFactor = 1.35; nacionalLabel = "Nacionalización Calzado"; }
+      const paso1 = v * usd;
+      const paso2 = paso1 * 1.26;
+      const paso3 = paso2 * nacionalFactor;
+      const paso4 = paso3 * vm;
+      const paso5 = paso4 * 2.53;
+      const paso6 = paso5 * 0.75;
+      const ars = paso6;
+      $("#arsFobLabel").textContent = "Precio comunidad estimado: $";
+      $("#arsFobValue").textContent = isFinite(ars) ? ars.toLocaleString("es-AR", {maximumFractionDigits:0}) : "—";
+      $("#arsFobDetail").innerHTML = `
+        <span>FOB: <b>${v}</b></span>
+        <span>× USD oficial venta: <b>${usd.toFixed(2)}</b> → $ ${paso1.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+        <span>× 1,26 (Gastos fijos) → $ ${paso2.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+        <span>× ${nacionalFactor.toFixed(2).replace(".",",")} (${nacionalLabel}) → $ ${paso3.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+        <span>× <span class="vm-display-wrap"><span id="vmDisplay">${vm.toFixed(2)}</span><input class="vm-editable-input" id="vmEditInput" type="number" step="0.01" min="0.01" value="${vm.toFixed(2)}" /><button type="button" class="vm-edit-btn" onclick="toggleVmEdit()">✏️</button><button type="button" class="vm-confirm-btn" id="vmConfirmBtn" onclick="confirmVmEdit()">✔️ OK</button></span> (Venta mayorista) → $ ${paso4.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+        <span>× 2,53 (Venta a locales) → $ ${paso5.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+        <span>× -25% (Descuento comunidad) → $ ${ars.toLocaleString("es-AR",{maximumFractionDigits:0})}</span>
+      `;
+    } else if (moneda === "ARS (Precio Comunidad)"){
+      const rubro2 = $("#rubro") ? $("#rubro").value : "";
+      let nf2 = 1.32; let nl2 = "Nacionalización";
+      if (rubro2 === "EQUIPO OUTDOOR"){ nf2 = 1.45; nl2 = "Nacionalización Equipo Outdoor"; }
+      else if (rubro2 === "INDUMENTARIA"){ nf2 = 1.32; nl2 = "Nacionalización Indumentaria"; }
+      else if (rubro2 === "ACCESORIOS"){ nf2 = 1.32; nl2 = "Nacionalización Accesorios"; }
+      else if (rubro2 === "CALZADO"){ nf2 = 1.35; nl2 = "Nacionalización Calzado"; }
+      const fob = (v * 1.3333) / usd / 1.26 / nf2 / vm / 2.53;
+      $("#arsFobLabel").textContent = "Equivale a un precio FOB de USD:";
+      $("#arsFobValue").textContent = isFinite(fob) ? fob.toFixed(2) : "—";
+      $("#arsFobDetail").innerHTML = `
+        <span>Precio comunidad: <b>$ ${v}</b></span>
+        <span>÷ USD oficial venta: ${usd.toFixed(2)}</span>
+        <span>÷ 1,26 (Gastos fijos)</span>
+        <span>÷ ${nf2.toFixed(2).replace(".",",")} (${nl2})</span>
+        <span>÷ ${vm.toFixed(2)} (Venta mayorista)</span>
+        <span>÷ 2,53 (Venta a locales)</span>
+        <span>÷ -25% (Descuento comunidad)</span>
+        <span>= <b>USD FOB ${isFinite(fob) ? fob.toFixed(2) : "—"}</b></span>
+      `;
+    } else if (moneda === "ARS (Costo nacional con gastos)"){
+      const rubro3 = $("#rubro") ? $("#rubro").value : "";
+      let nf3 = 1.32; let nl3 = "Nacionalización";
+      if (rubro3 === "EQUIPO OUTDOOR"){ nf3 = 1.45; nl3 = "Nacionalización Equipo Outdoor"; }
+      else if (rubro3 === "INDUMENTARIA"){ nf3 = 1.32; nl3 = "Nacionalización Indumentaria"; }
+      else if (rubro3 === "ACCESORIOS"){ nf3 = 1.32; nl3 = "Nacionalización Accesorios"; }
+      else if (rubro3 === "CALZADO"){ nf3 = 1.35; nl3 = "Nacionalización Calzado"; }
+      const fob = v / usd / nf3 / 1.26;
+      $("#arsFobLabel").textContent = "Equivale a un precio FOB de USD:";
+      $("#arsFobValue").textContent = isFinite(fob) ? fob.toFixed(2) : "—";
+      $("#arsFobDetail").innerHTML = `
+        <span>Costo nacional: <b>$ ${v}</b></span>
+        <span>÷ USD oficial venta: ${usd.toFixed(2)}</span>
+        <span>÷ ${nf3.toFixed(2).replace(".",",")} (${nl3})</span>
+        <span>÷ 1,26 (Gastos fijos)</span>
+        <span>= <b>USD FOB ${isFinite(fob) ? fob.toFixed(2) : "—"}</b></span>
+      `;
+    }
+
+    hint.style.display = "block";
+  }
+
+  function toggleVmEdit(){
+    const inp = document.getElementById("vmEditInput");
+    const btn = document.getElementById("vmConfirmBtn");
+    const isOpen = inp.classList.contains("visible");
+    if (isOpen){
+      inp.classList.remove("visible");
+      btn.classList.remove("visible");
+    } else {
+      inp.value = ventaMayoristaValor.toFixed(2);
+      inp.classList.add("visible");
+      btn.classList.add("visible");
+      inp.focus(); inp.select();
+    }
+  }
+
+  function confirmVmEdit(){
+    const inp = document.getElementById("vmEditInput");
+    const n = parseFloat(String(inp.value).replace(",","."));
+    if (isFinite(n) && n > 0){
+      ventaMayoristaValor = n;
+      inp.classList.remove("visible");
+      document.getElementById("vmConfirmBtn").classList.remove("visible");
+      updateArsFobHint();
+    } else {
+      showToast("Valor inválido", "err");
+    }
+  }
+
+  // Inline VM enter key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target && e.target.id === "vmEditInput"){
+      e.preventDefault();
+      confirmVmEdit();
+    }
+  });
+
+
+  // ── Exclusión mutua: Excluyente ↔ Flexible hacia arriba ──
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.id === "cbFlexArriba") {
+      $("#flexArribaExtra").style.display = e.target.checked ? "block" : "none";
+      if (e.target.checked) {
+        const cbEx = document.getElementById("cbExcluyente");
+        if (cbEx) cbEx.checked = false;
+      }
+    }
+    if (e.target && e.target.id === "cbExcluyente") {
+      if (e.target.checked) {
+        const cbFlex = document.getElementById("cbFlexArriba");
+        if (cbFlex) { cbFlex.checked = false; $("#flexArribaExtra").style.display = "none"; }
+      }
+    }
+  });
+
+  // Rubros -> tipologías (antes subrubros)
+  const subrubrosPorRubro = {
+    "INDUMENTARIA": ["Babucha","Bermuda","Buzo/Polera","Calza","Camisa","Camiseta","Campera","Chaleco","Chomba","Pantalón","Piloto","Pollera","Remera","Rompeviento","Short","Top","Otro..."],
+    "ACCESORIOS": ["Antiparras","Bufanda","Cinturón","Cuello/Chall","Gorra","Gorro","Guantes","Lentes","Manta","Medias","Pasamontaña","Sombrero","Otro..."],
+    "EQUIPO OUTDOOR": ["Baliza","Bastón","Bolsa de dormir","Bolso","Botella","Carpa/Refugio","Colchón","Cooler bag","Faroles/Luces","Hamaca","Headlamp","Mat","Mochila","Mueble","Riñonera","Silla/Banquito","Termo","Waterbag","Otro..."],
+    "CALZADO": ["Bota","Sandalia","Zapatilla","Otro..."]
+  };
+
+  // Clasificaciones y temporadas válidas por tipología (derivado del excel)
+  const optsPorTipologia = {
+    // INDUMENTARIA
+    "Campera":       { clasifs:["Técnico","Outdoor","Matelassé","Pluma","Punto","Polar"], temps:["Invierno","Verano"] },
+    "Pantalón":      { clasifs:["Técnico","Outdoor","Térmico","Training","Urbano"],       temps:["Invierno","Verano"] },
+    "Chaleco":       { clasifs:["Técnico","Outdoor","Matelassé","Pluma","Punto","Polar"], temps:["Invierno","Verano"] },
+    "Piloto":        { clasifs:["Técnico","Outdoor"],                                     temps:["Invierno"] },
+    "Buzo/Polera":   { clasifs:["Punto","Polar"],                                         temps:["Invierno","Verano"] },
+    "Rompeviento":   { clasifs:["Técnico","Outdoor"],                                     temps:["Verano"] },
+    "Camisa":        { clasifs:["Outdoor"],                                               temps:["Invierno","Verano"] },
+    "Bermuda":       { clasifs:["Outdoor","Urbano","Training"],                           temps:["Verano"] },
+    "Short":         { clasifs:["Outdoor","Urbano","Training"],                           temps:["Verano"] },
+    "Babucha":       { clasifs:["Training"],                                              temps:["Verano"] },
+    "Remera":        { clasifs:["Urbano"],                                                temps:["Verano"] },
+    "Chomba":        { clasifs:["Urbano"],                                                temps:["Verano"] },
+    "Camiseta":      { clasifs:["Térmico"],                                               temps:["Invierno"] },
+    "Calza":         { clasifs:["Térmico","Training"],                                    temps:["Invierno","Verano"] },
+    "Top":           { clasifs:["Training"],                                              temps:["Verano"] },
+    "Pollera":       { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno","Verano"] },
+    // ACCESORIOS
+    "Guantes":       { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Invierno","Verano"] },
+    "Gorro":         { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno"] },
+    "Cuello/Chall":  { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno"] },
+    "Bufanda":       { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno"] },
+    "Pasamontaña":   { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno"] },
+    "Manta":         { clasifs:["Urbano","Outdoor"],                                      temps:["Invierno"] },
+    "Gorra":         { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Verano"] },
+    "Sombrero":      { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Verano"] },
+    "Medias":        { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Invierno","Verano"] },
+    "Lentes":        { clasifs:[],                                                        temps:[] },
+    "Antiparras":    { clasifs:[],                                                        temps:[] },
+    "Cinturón":      { clasifs:[],                                                        temps:[] },
+    // EQUIPO OUTDOOR
+    "Mochila":       { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Verano"] },
+    "Riñonera":      { clasifs:["Outdoor","Urbano"],                                      temps:["Verano"] },
+    "Bolso":         { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Verano"] },
+    "Cooler bag":    { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Verano"] },
+    "Waterbag":      { clasifs:["Técnico","Outdoor"],                                     temps:["Verano"] },
+    "Termo":         { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Botella":       { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Carpa/Refugio": { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Bolsa de dormir":{ clasifs:["Outdoor"],                                              temps:["Verano"] },
+    "Bastón":        { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Mat":           { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Colchón":       { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Hamaca":        { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Silla/Banquito":{ clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Mueble":        { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Headlamp":      { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Faroles/Luces": { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    "Baliza":        { clasifs:["Outdoor"],                                               temps:["Verano"] },
+    // CALZADO
+    "Zapatilla":     { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Invierno","Verano"] },
+    "Bota":          { clasifs:["Técnico","Outdoor","Urbano"],                            temps:["Invierno","Verano"] },
+    "Sandalia":      { clasifs:["Outdoor","Urbano"],                                      temps:["Verano"] }
+  };
+
+  function updateClasifAndTemp(tipologia, prevCt, prevTmp){
+    const opts = optsPorTipologia[tipologia];
+    const ctSel = $("#clasifTecnica");
+    const tmpSel = $("#temporada");
+
+    // Clasificación técnica
+    ctSel.innerHTML = '<option value="">— Seleccionar —</option>';
+    if (!opts || !opts.clasifs.length){ ctSel.disabled = true; }
+    else {
+      opts.clasifs.forEach(ct => {
+        const o = document.createElement("option");
+        o.value = ct; o.textContent = ct;
+        ctSel.appendChild(o);
+      });
+      ctSel.disabled = false;
+      ctSel.value = (prevCt && opts.clasifs.includes(prevCt)) ? prevCt : (opts.clasifs.length === 1 ? opts.clasifs[0] : "");
+    }
+
+    // Temporada
+    tmpSel.innerHTML = '<option value="">— Seleccionar —</option>';
+    if (!opts || !opts.temps.length){ tmpSel.disabled = true; }
+    else {
+      opts.temps.forEach(t => {
+        const o = document.createElement("option");
+        o.value = t; o.textContent = t;
+        tmpSel.appendChild(o);
+      });
+      tmpSel.disabled = false;
+      if (prevTmp && opts.temps.includes(prevTmp)) tmpSel.value = prevTmp;
+      else if (opts.temps.length === 1) tmpSel.value = opts.temps[0];
+      else tmpSel.value = "";
+    }
+  }
+
+  function updateSubrubros(){
+    const rubro = $("#rubro").value;
+    const subSel = $("#subrubro");
+    const prev = subSel.value;
+    subSel.innerHTML = '<option value="">— Seleccionar —</option>';
+    if (!rubro || !subrubrosPorRubro[rubro]){ subSel.disabled = true; }
+    else {
+      subrubrosPorRubro[rubro].forEach(sr => {
+        const opt = document.createElement("option");
+        opt.value = sr; opt.textContent = sr;
+        subSel.appendChild(opt);
+      });
+      subSel.disabled = false;
+      if (prev){ subSel.value = prev; if (subSel.value !== prev) subSel.value = ""; }
+    }
+    // When rubro changes, tipología is cleared so reset clasif/temp from scratch
+    updateClasifAndTemp(subSel.value, "", "");
+    // Update tecItems for this rubro
+    tecItems = (rubro && tecGroups[rubro]) ? tecGroups[rubro] : [];
+    updateCotizacion();
+    refreshTecnologias();
+  }
+
+  // ── Objetivos ── CAMBIO 4 ──
+  const objetivos = [
+    "Desarrollar un nuevo modelo o actualizar un diseño existente",   // CAMBIO 4a
+    "Mejorar la calidad actual",
+    "Mejorar el precio actual",
+    "Conseguir un nuevo proveedor con una oferta equivalente a la actual",
+    "Conseguir un proveedor que se especialice en el rubro",
+    "Otro (aclarar)"
+  ];
+
+  function renderObjetivos(){
+    const tbody = $("#objetivosBody");
+    tbody.innerHTML = "";
+    objetivos.forEach((o) => {
+      const tr = document.createElement("tr");
+      tr.setAttribute("data-key", o);
+
+      const tdTxt = document.createElement("td");
+      tdTxt.textContent = o;
+
+      const tdDes = document.createElement("td");
+      const des = document.createElement("input");
+      des.type = "checkbox"; des.className = "bigcheck";
+      des.setAttribute("aria-label", "Deseable: " + o);
+      tdDes.appendChild(des);
+
+      const tdEx = document.createElement("td");
+      const ex = document.createElement("input");
+      ex.type = "checkbox"; ex.className = "bigcheck";
+      ex.setAttribute("aria-label", "Excluyente: " + o);
+      tdEx.appendChild(ex);
+
+      // Fila de mensaje contextual
+      const msgTr = document.createElement("tr");
+      msgTr.style.display = "none";
+      const msgTd = document.createElement("td");
+      msgTd.colSpan = 3;
+      msgTd.style.cssText = "padding:0 12px 10px; font-size:.86rem;";
+      msgTr.appendChild(msgTd);
+
+      function applyChoice(choice){
+        des.checked = (choice === "des");
+        ex.checked  = (choice === "ex");
+        if (o.indexOf("Otro") === 0){
+          const show = (choice === "des" || choice === "ex");
+          $("#otroWrap").style.display = show ? "block" : "none";
+          if (!show) $("#objetivoOtroTexto").value = "";
+          $("#otroCount").textContent = String($("#objetivoOtroTexto").value.length);
+        }
+      }
+
+      function updateMsg(){
+        msgTr.style.display = "none";
+        msgTd.innerHTML = "";
+        // CAMBIO 4b: mensaje proveedor equivalente
+        if (o === "Conseguir un nuevo proveedor con una oferta equivalente a la actual" && (des.checked || ex.checked)){
+          msgTr.style.display = "";
+          msgTd.innerHTML = `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 12px;color:#1d4ed8;">ℹ️ Si el objetivo es reemplazar un producto nacional por importado, tené en cuenta que se debe definir siguiendo el <b>cronograma de desarrollo de producto nacional</b>, que inicia con más anticipación que el importado.</div>`;
+        }
+        // CAMBIO 4c: mensaje mejorar calidad/precio
+        if ((o === "Mejorar la calidad actual" || o === "Mejorar el precio actual") && des.checked){
+          msgTr.style.display = "";
+          msgTd.innerHTML = `<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;color:#92400e;">⚠️ Sabemos que siempre es deseable mejorar la calidad y precio de nuestros productos. Seleccionar esta opción únicamente si está relacionada con el objetivo de esta búsqueda puntual.</div>`;
+        }
+      }
+
+      des.addEventListener("change", () => {
+        if (des.checked) { ex.checked = false; applyChoice("des"); }
+        else applyChoice(ex.checked ? "ex" : "none");
+        updateMsg();
+      });
+      ex.addEventListener("change", () => {
+        if (ex.checked) { des.checked = false; applyChoice("ex"); }
+        else applyChoice(des.checked ? "des" : "none");
+        updateMsg();
+      });
+
+      tr.appendChild(tdTxt);
+      tr.appendChild(tdDes);
+      tr.appendChild(tdEx);
+      tbody.appendChild(tr);
+      tbody.appendChild(msgTr);
+    });
+  }
+
+  // ── Tecnologías ──
+  // Master list of all possible tech items (key used to match reqTec from cotizacionDB)
+  // Tecnologías agrupadas por rubro
+  const tecGroups = {
+    "INDUMENTARIA": [
+      { label: "Columna de agua (valor numérico)", key: "Columna de agua", hasInput: true },
+      { label: "Respirabilidad", key: "Respirabilidad", hasInput: false },
+      { label: "Repelencia", key: "Repelencia", hasInput: false },
+      { label: "Trampa de nieve", key: "Trampa de nieve", hasInput: false },
+      { label: "Costuras completamente termoselladas", key: "Termosellado", hasInput: false },
+      { label: "Antipilling", key: "Antipilling", hasInput: false },
+      { label: "Sin costuras (seamless)", key: "Sin costuras", hasInput: false },
+      { label: "Relleno (pluma/sintético)", key: "Relleno", hasInput: false },
+      { label: "RDS (Responsible Down Standard)", key: "RDS", hasInput: false },
+      { label: "Protección UV", key: "Protección UV", hasInput: false },
+      { label: "Antimosquito", key: "Antimosquito", hasInput: false },
+      { label: "Capucha fija", key: "Capucha fija", hasInput: false },
+      { label: "Capucha desmontable", key: "Capucha desmontable", hasInput: false },
+      { label: "Regulación en puños y cintura", key: "Regulación en puños y cintura", hasInput: false },
+      { label: "Cierres YKK", key: "Cierres YKK", hasInput: false }
+    ],
+    "ACCESORIOS": [
+      { label: "Columna de agua (valor numérico)", key: "Columna de agua", hasInput: true },
+      { label: "Respirabilidad", key: "Respirabilidad", hasInput: false },
+      { label: "Repelencia", key: "Repelencia", hasInput: false },
+      { label: "Trampa de nieve", key: "Trampa de nieve", hasInput: false },
+      { label: "Costuras completamente termoselladas", key: "Termosellado", hasInput: false },
+      { label: "Protección UV", key: "Protección UV", hasInput: false }
+    ],
+    "EQUIPO OUTDOOR": [
+      { label: "Columna de agua (valor numérico)", key: "Columna de agua", hasInput: true },
+      { label: "Repelencia", key: "Repelencia", hasInput: false },
+      { label: "Ataques (refuerzos)", key: "Ataques", hasInput: false },
+      { label: "Costuras completamente termoselladas", key: "Termosellado", hasInput: false },
+      { label: "Recubrimiento silver", key: "Recubrimiento silver", hasInput: false },
+      { label: "Powder coating", key: "Powder coating", hasInput: false },
+      { label: "BPA Free", key: "BPA Free", hasInput: false },
+      { label: "Acero inoxidable 304/304", key: "304/304 Acero inoxidable", hasInput: false },
+      { label: "Acero inoxidable 304/201", key: "304/201 Acero inoxidable", hasInput: false }
+    ],
+    "CALZADO": [
+      { label: "Columna de agua (valor numérico)", key: "Columna de agua", hasInput: true },
+      { label: "Respirabilidad", key: "Respirabilidad", hasInput: false },
+      { label: "Repelencia", key: "Repelencia", hasInput: false },
+      { label: "Suelín de caucho", key: "Suelín de caucho", hasInput: false },
+      { label: "Antideslizante", key: "Antideslizante", hasInput: false },
+      { label: "LWG (Leather Working Group)", key: "LWG", hasInput: false },
+      { label: "Fuelle en lengüeta", key: "Fuelle en lengüeta", hasInput: false }
+    ]
+  };
+  // tecItems dinámico: apunta al grupo del rubro actual (o vacío)
+  let tecItems = [];
+
+  // Returns { key -> "Obligatorio"|"Deseable" } based on current selection
+  function getTecPresetsFromSelection(){
+    const rubro = ($("#rubro").value || "").toUpperCase();
+    const tipologia = $("#subrubro").value || "";
+    const clasif = $("#clasifTecnica").value || "";
+    const temporada = $("#temporada").value || "";
+    if (!rubro || !tipologia) return {};
+
+    let match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, temporada));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, ""));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", temporada));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", ""));
+    if (!match) return {};
+
+    // reqTec is now a plain object { "Columna de agua": "Obligatorio", ... }
+    return match.reqTec || {};
+  }
+
+  function renderTecnologias(presets){
+    presets = presets || {};
+    const tbody = $("#tecBody");
+    tbody.innerHTML = "";
+    tecItems.forEach((tec, idx) => {
+      let preset = presets[tec.key] || null;
+      // Normalize: anything that's not "Deseable" and not null is treated as "Obligatorio"
+      if (preset && preset !== "Deseable" && preset !== "Obligatorio") preset = "Obligatorio";
+      const tr = document.createElement("tr");
+      tr.setAttribute("data-item", tec.key);
+
+      // Highlight row if preset
+      if (preset) tr.style.background = preset === "Obligatorio" ? "#fff7ed" : "#f0fdf4";
+
+      const tdItem = document.createElement("td");
+      let labelHtml = `<b>${tec.label}</b>`;
+      if (preset) labelHtml += ` <span style="font-size:.78rem;font-weight:600;padding:2px 7px;border-radius:99px;background:${preset==="Obligatorio"?"#fed7aa;color:#9a3412":"#bbf7d0;color:#166534"}">Sugerido: ${preset}</span>`;
+      if (tec.hasInput){
+        labelHtml += `<br><small style="color:var(--muted)">Ingresá el valor (ej: 15000 mm).</small>
+          <div style="margin-top:8px; max-width:240px;">
+            <input id="columnaValor" name="columnaValor" type="number" min="0" step="1" placeholder="Valor (numérico)">
+          </div>`;
+      }
+      tdItem.innerHTML = labelHtml;
+
+      const tdDes = document.createElement("td"); tdDes.style.textAlign = "center";
+      const cbDes = document.createElement("input");
+      cbDes.type = "checkbox"; cbDes.className = "bigcheck"; cbDes.name = `tecDes_${idx}`;
+      cbDes.setAttribute("aria-label", `Deseable: ${tec.label}`);
+      if (preset === "Deseable") cbDes.checked = true;
+      tdDes.appendChild(cbDes);
+
+      const tdObl = document.createElement("td"); tdObl.style.textAlign = "center";
+      const cbObl = document.createElement("input");
+      cbObl.type = "checkbox"; cbObl.className = "bigcheck"; cbObl.name = `tecObl_${idx}`;
+      cbObl.setAttribute("aria-label", `Obligatorio: ${tec.label}`);
+      if (preset === "Obligatorio") cbObl.checked = true;
+      tdObl.appendChild(cbObl);
+
+      cbDes.addEventListener("change", () => { if (cbDes.checked) cbObl.checked = false; });
+      cbObl.addEventListener("change", () => { if (cbObl.checked) cbDes.checked = false; });
+
+      tr.appendChild(tdItem);
+      tr.appendChild(tdDes);
+      tr.appendChild(tdObl);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Re-render tecnologías with fresh presets whenever selection changes
+  function refreshTecnologias(){
+    const rubro = ($("#rubro").value || "").toUpperCase();
+    tecItems = (rubro && tecGroups[rubro]) ? tecGroups[rubro] : [];
+    const presets = getTecPresetsFromSelection();
+    renderTecnologias(presets);
+  }
+
+  // ── formToObject ──
+  function formToObject(){
+    const fd = new FormData($("#form"));
+    const adj = fd.get("adjunto");
+    const adjName = (adj && adj.name) ? adj.name : "";
+
+    const objetivosSel = [];
+    $$("#objetivosBody tr[data-key]").forEach(tr => {
+      const key = tr.getAttribute("data-key");
+      const cbs = tr.querySelectorAll('input[type="checkbox"]');
+      const des = cbs[0]; const ex = cbs[1];
+      if ((des && des.checked) || (ex && ex.checked)){
+        objetivosSel.push({ objetivo: key, excluyente: ex ? ex.checked : false, deseable: des ? des.checked : false });
+      }
+    });
+
+    const tecnologias = [];
+    tecItems.forEach((tec, idx) => {
+      const des = document.querySelector(`input[name="tecDes_${idx}"]`)?.checked || false;
+      const obl = document.querySelector(`input[name="tecObl_${idx}"]`)?.checked || false;
+      tecnologias.push({ item: tec.label, deseable: des, obligatorio: obl });
+    });
+
+    return {
+      fechaSolicitud: safe(fd.get("fechaSolicitud")),
+      fechaCierre: safe(fd.get("fechaCierre")),
+      prioridad: safe(fd.get("prioridad")),
+      rubro: safe(fd.get("rubro")),
+      subrubro: safe(fd.get("subrubro")),
+      clasifTecnica: safe(fd.get("clasifTecnica")),
+      temporada: safe(fd.get("temporada")),
+      genero: (fd.getAll("genero") || []).map(v => safe(v)).filter(Boolean),
+      articulosRef: safe(fd.get("articulosRef")),
+      objetivos: objetivosSel,
+      objetivoOtroTexto: safe(fd.get("objetivoOtroTexto")),
+      targetPrice: {
+        moneda: safe(fd.get("moneda")),
+        precioMax: safe(fd.get("precioMax")),
+        tipo: (fd.getAll("targetPriceTipo") || []).map(v => safe(v)).filter(Boolean),
+        flexArribaCuanto: safe(fd.get("flexArribaCuanto"))
+      },
+      tecnologiasAclaraciones: safe(fd.get("tecAclaraciones")),
+      materialidad: safe(fd.get("materialidad")),
+      columnaValor: safe(fd.get("columnaValor")),
+      tecnologias: tecnologias,
+      origen: (fd.getAll("origen") || []).map(v => safe(v)).filter(Boolean),
+      origenOtroTexto: safe(fd.get("origenOtroTexto")),
+      cantidades: { porColor: safe(fd.get("qtyPorColor")), porArticulo: safe(fd.get("qtyPorArticulo")) },
+      proveedor: safe(fd.get("proveedor")),
+      muestraFisica: safe(fd.get("muestraFisica")),
+      adjuntoNombre: adjName,
+      adjuntoDesc: safe(fd.get("adjuntoDesc")),
+      comentarios: safe(fd.get("comentarios"))
+    };
+  }
+
+  // ── Helper: get cotizacion match for current data ──
+  function getCotizacionMatch(data){
+    const rubro = (data.rubro || "").toUpperCase();
+    const tipologia = data.subrubro || "";
+    const clasif = data.clasifTecnica || "";
+    const temporada = data.temporada || "";
+    if (!rubro || !tipologia) return null;
+    let m = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, temporada));
+    if (!m) m = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, ""));
+    if (!m) m = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", temporada));
+    if (!m) m = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", ""));
+    return m || null;
+  }
+
+  // ── buildSummary ──
+  function buildSummary(data){
+    const money = data.targetPrice.moneda;
+    const priceStr = data.targetPrice.precioMax ? (money + " " + data.targetPrice.precioMax) : "";
+    const prioColors = { "Baja":"#16a34a","Media":"#b8930a","Alta":"#ea580c","Urgente":"#dc2626" };
+    const prioBgs   = { "Baja":"#f0fdf4","Media":"#fefce8","Alta":"#fff7ed","Urgente":"#fff1f2" };
+    const prioBorder= { "Baja":"#bbf7d0","Media":"#fde68a","Alta":"#fed7aa","Urgente":"#fecdd3" };
+    const pc = prioColors[data.prioridad]||"#374151";
+    const pb = prioBgs[data.prioridad]||"#f9fafb";
+    const pbd = prioBorder[data.prioridad]||"#d1d5db";
+
+    const S = (s) => `<span style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;">${s}</span>`;
+    const label = (s) => `<span style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;">${s}</span>`;
+    const val   = (s) => `<span style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;font-weight:600;color:#111827;">${s}</span>`;
+    const sec   = (s) => `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0284c7;border-bottom:2px solid #e0f2fe;padding-bottom:4px;margin:18px 0 10px;">${s}</div>`;
+    const row   = (l,v) => v ? `<tr><td style="padding:4px 12px 4px 0;vertical-align:top;min-width:160px;">${label(l)}</td><td style="padding:4px 0;">${val(v)}</td></tr>` : "";
+    const bullet = (items) => items.map(i=>`<li style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;margin:3px 0;">${i}</li>`).join("");
+
+    let html = `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:680px;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">`;
+
+    // Header
+    html += `<div style="background:linear-gradient(135deg,#0284c7,#0369a1);padding:20px 24px;">
+      <div style="font-family:'Montserrat',Arial,sans-serif;font-size:18px;font-weight:700;color:#ffffff;letter-spacing:-.2px;">📋 Solicitud de Búsqueda</div>
+      <div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#bae6fd;margin-top:4px;">Producto Terminado</div>
+    </div>`;
+
+    html += `<div style="padding:20px 24px;">`;
+
+    // Prioridad badge
+    if (data.prioridad){
+      html += `<div style="display:inline-block;background:${pb};border:2px solid ${pbd};border-radius:8px;padding:6px 14px;font-family:'Montserrat',Arial,sans-serif;font-size:13px;font-weight:700;color:${pc};margin-bottom:16px;">
+        Prioridad: ${data.prioridad}
+      </div>`;
+    }
+
+    // Datos básicos
+    html += sec("Datos generales");
+    html += `<table style="border-collapse:collapse;width:100%;">`;
+    html += row("Fecha de solicitud", formatDateISOtoDMY(data.fechaSolicitud));
+    html += row("Fecha de cierre", formatDateISOtoDMY(data.fechaCierre));
+    const rubroStr = data.rubro + (data.subrubro ? " / " + data.subrubro : "");
+    if (data.rubro) html += row("Rubro / Tipología", rubroStr);
+    if (data.clasifTecnica) html += row("Clasificación técnica", data.clasifTecnica);
+    if (data.temporada) html += row("Temporada", data.temporada);
+    if (data.genero && data.genero.length) html += row("Género", data.genero.join(" / "));
+    html += `</table>`;
+
+    // Artículos de referencia
+    if (data.articulosRef){
+      html += sec("Artículo(s) de referencia");
+      html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;background:#f8fafc;border-radius:8px;padding:10px 14px;white-space:pre-wrap;">${data.articulosRef}</div>`;
+    }
+
+    // Objetivos
+    if (data.objetivos && data.objetivos.length){
+      html += sec("Objetivos de la búsqueda");
+      html += `<ul style="margin:0;padding-left:18px;">`;
+      data.objetivos.forEach(o => {
+        const tag = o.excluyente ? `<span style="font-size:11px;font-weight:700;background:#fee2e2;color:#b91c1c;border-radius:4px;padding:1px 6px;margin-left:6px;">Excluyente</span>`
+                  : o.deseable   ? `<span style="font-size:11px;font-weight:700;background:#dcfce7;color:#166534;border-radius:4px;padding:1px 6px;margin-left:6px;">Deseable</span>` : "";
+        html += `<li style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;margin:5px 0;">${o.objetivo}${tag}</li>`;
+      });
+      if (data.objetivoOtroTexto) html += `<li style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;margin:5px 0;list-style:none;padding-left:4px;">↳ ${data.objetivoOtroTexto}</li>`;
+      html += `</ul>`;
+    }
+
+    // Precio
+    if (priceStr){
+      html += sec("Precio objetivo");
+      html += `<table style="border-collapse:collapse;width:100%;">`;
+      html += row("Target price máximo", priceStr);
+      if (data.targetPrice.tipo && data.targetPrice.tipo.length){
+        html += row("Tipo", data.targetPrice.tipo.join(" / "));
+        const flex = data.targetPrice.tipo.some(t => t.indexOf("Flexible hacia arriba") !== -1);
+        if (flex && data.targetPrice.flexArribaCuanto) html += row("Flex. hacia arriba", data.targetPrice.flexArribaCuanto);
+      }
+      if (data.referenciaPrecio) html += row("Referencia de precio", data.referenciaPrecio);
+      if (data.targetPrice.moneda === "USD (FOB)" && data.targetPrice.precioMax){
+        const v = Number(data.targetPrice.precioMax);
+        if (isFinite(v) && v > 0){
+          const ars = v * usdOficialVenta * 1.26 * 1.32 * ventaMayoristaValor * 2.53 * 0.75;
+          if (isFinite(ars)) html += row("Precio comunidad estimado", "$ " + ars.toLocaleString("es-AR",{maximumFractionDigits:0}));
+        }
+      }
+      html += `</table>`;
+    }
+
+    // Tecnologías
+    const tecRelevantes = (data.tecnologias || []).filter(t => t.deseable || t.obligatorio);
+    if (tecRelevantes.length || data.tecnologiasAclaraciones){
+      html += sec("Tecnologías y recursos");
+      if (tecRelevantes.length){
+        const obl = tecRelevantes.filter(t=>t.obligatorio);
+        const des = tecRelevantes.filter(t=>t.deseable);
+        if (obl.length){
+          html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;color:#9a3412;margin:6px 0 4px;">Obligatorio</div>`;
+          html += `<ul style="margin:0 0 8px;padding-left:18px;">${bullet(obl.map(t=>t.item+(t.item==="Columna de agua (valor numérico)"&&data.columnaValor?" — "+data.columnaValor+" mm":"")))}</ul>`;
+        }
+        if (des.length){
+          html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;color:#166534;margin:6px 0 4px;">Deseable</div>`;
+          html += `<ul style="margin:0 0 8px;padding-left:18px;">${bullet(des.map(t=>t.item))}</ul>`;
+        }
+      }
+      if (data.tecnologiasAclaraciones){
+        html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:12px;color:#6b7280;margin-top:6px;font-style:italic;">${data.tecnologiasAclaraciones}</div>`;
+      }
+    }
+
+    // Origen y cantidades
+    html += sec("Producción");
+    html += `<table style="border-collapse:collapse;width:100%;">`;
+    if (data.origen && data.origen.length){
+      const origenStr = data.origen.join(" / ") + (data.origen.indexOf("Otros") !== -1 && data.origenOtroTexto ? " — "+data.origenOtroTexto : "");
+      html += row("Origen", origenStr);
+    }
+    if (data.cantidades && data.cantidades.porColor)    html += row("Cantidad por color", data.cantidades.porColor);
+    if (data.cantidades && data.cantidades.porArticulo) html += row("Cantidad por artículo", data.cantidades.porArticulo);
+    html += `</table>`;
+
+    // Proveedor
+    if (data.proveedor){
+      html += sec("Proveedor");
+      html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;background:#f8fafc;border-radius:8px;padding:10px 14px;white-space:pre-wrap;">${data.proveedor}</div>`;
+    }
+    if (data.muestraFisica){
+      if (!data.proveedor) html += sec("Proveedor");
+      html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;margin-top:8px;">✅ Muestra física disponible</div>`;
+    }
+    if (data.adjuntoNombre){
+      html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;margin-top:6px;">📎 ${data.adjuntoNombre}${data.adjuntoDesc?" – "+data.adjuntoDesc:""}</div>`;
+    }
+
+    // Comentarios
+    if (data.comentarios){
+      html += sec("Comentarios");
+      html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;background:#f8fafc;border-radius:8px;padding:10px 14px;white-space:pre-wrap;">${data.comentarios}</div>`;
+    }
+
+    // Cotización
+    const cot = getCotizacionMatch(data);
+    if (cot) {
+      html += sec("Cotización — datos para Comercio Exterior");
+      if (cot.datos && cot.datos.length){
+        html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin:0 0 6px;">Datos necesarios para evaluar la cotización</div>`;
+        html += `<ul style="margin:0 0 12px;padding-left:18px;">${bullet(cot.datos)}</ul>`;
+      }
+      if (cot.incluir && cot.incluir.length){
+        html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin:0 0 6px;">La cotización debe incluir</div>`;
+        html += `<ul style="margin:0 0 12px;padding-left:18px;">${bullet(cot.incluir)}</ul>`;
+      }
+      if (cot.notas){
+        html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin:0 0 6px;">Notas</div>`;
+        html += `<div style="font-family:'Montserrat',Arial,sans-serif;font-size:13px;color:#374151;background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;">${cot.notas}</div>`;
+      }
+    }
+
+    html += `</div></div>`;
+    return html;
+  }
+
+  function buildSummaryPlain(data){
+    const lines = [];
+    const sep  = (t) => { lines.push(""); lines.push("── " + t.toUpperCase() + " ──"); };
+    const kv   = (l,v) => { if(v) lines.push(l + ": " + v); };
+    const bul  = (arr) => arr.forEach(i => lines.push("  • " + i));
+    const money = data.targetPrice.moneda;
+    const priceStr = data.targetPrice.precioMax ? (money + " " + data.targetPrice.precioMax) : "";
+
+    lines.push("╔══════════════════════════════════════════╗");
+    lines.push("║        SOLICITUD DE BÚSQUEDA             ║");
+    lines.push("╚══════════════════════════════════════════╝");
+    lines.push("");
+
+    if (data.prioridad) lines.push("▶ PRIORIDAD: " + data.prioridad.toUpperCase());
+    lines.push("");
+
+    sep("Datos generales");
+    kv("Fecha de solicitud", formatDateISOtoDMY(data.fechaSolicitud));
+    kv("Fecha de cierre",    formatDateISOtoDMY(data.fechaCierre));
+    const rubroStr = data.rubro + (data.subrubro ? " / " + data.subrubro : "");
+    if (data.rubro) kv("Rubro / Tipología", rubroStr);
+    if (data.clasifTecnica) kv("Clasificación técnica", data.clasifTecnica);
+    if (data.temporada)     kv("Temporada", data.temporada);
+    if (data.genero && data.genero.length) kv("Género", data.genero.join(" / "));
+
+    if (data.articulosRef){
+      sep("Artículo(s) de referencia");
+      lines.push(data.articulosRef);
+    }
+
+    if (data.objetivos && data.objetivos.length){
+      sep("Objetivos de la búsqueda");
+      data.objetivos.forEach(o => {
+        const tag = o.excluyente ? "[Excluyente]" : "[Deseable]";
+        lines.push("  " + tag + " " + o.objetivo);
+      });
+      if (data.objetivoOtroTexto) lines.push("  ↳ " + data.objetivoOtroTexto);
+    }
+
+    if (priceStr){
+      sep("Precio objetivo");
+      kv("Target price máximo", priceStr);
+      if (data.targetPrice.tipo && data.targetPrice.tipo.length){
+        kv("Tipo", data.targetPrice.tipo.join(" / "));
+        const flex = data.targetPrice.tipo.some(t => t.indexOf("Flexible hacia arriba") !== -1);
+        if (flex && data.targetPrice.flexArribaCuanto) kv("Flex. hacia arriba", data.targetPrice.flexArribaCuanto);
+      }
+      if (data.referenciaPrecio) kv("Referencia de precio", data.referenciaPrecio);
+      if (data.targetPrice.moneda === "USD (FOB)" && data.targetPrice.precioMax){
+        const v = Number(data.targetPrice.precioMax);
+        if (isFinite(v) && v > 0){
+          const ars = v * usdOficialVenta * 1.26 * 1.32 * ventaMayoristaValor * 2.53 * 0.75;
+          if (isFinite(ars)) kv("Precio comunidad estimado", "$ " + ars.toLocaleString("es-AR",{maximumFractionDigits:0}));
+        }
+      }
+    }
+
+    const tecR = (data.tecnologias||[]).filter(t=>t.deseable||t.obligatorio);
+    if (tecR.length || data.tecnologiasAclaraciones){
+      sep("Tecnologías y recursos");
+      const obl = tecR.filter(t=>t.obligatorio);
+      const des = tecR.filter(t=>t.deseable);
+      if (obl.length){ lines.push("  Obligatorio:"); bul(obl.map(t=>t.item+(t.item==="Columna de agua (valor numérico)"&&data.columnaValor?" — "+data.columnaValor+" mm":""))); }
+      if (des.length){ lines.push("  Deseable:");    bul(des.map(t=>t.item)); }
+      if (data.tecnologiasAclaraciones) lines.push("  Aclaraciones: " + data.tecnologiasAclaraciones);
+    }
+
+    sep("Producción");
+    if (data.origen && data.origen.length){
+      const origenStr = data.origen.join(" / ") + (data.origen.indexOf("Otros") !== -1 && data.origenOtroTexto ? " — "+data.origenOtroTexto : "");
+      kv("Origen", origenStr);
+    }
+    if (data.cantidades && data.cantidades.porColor)    kv("Cantidad por color",    data.cantidades.porColor);
+    if (data.cantidades && data.cantidades.porArticulo) kv("Cantidad por artículo", data.cantidades.porArticulo);
+
+    if (data.proveedor || data.muestraFisica || data.adjuntoNombre){
+      sep("Proveedor");
+      if (data.proveedor)     lines.push(data.proveedor);
+      if (data.muestraFisica) lines.push("  ✓ Muestra física disponible");
+      if (data.adjuntoNombre) lines.push("  Adjunto: " + data.adjuntoNombre + (data.adjuntoDesc?" – "+data.adjuntoDesc:""));
+    }
+
+    if (data.comentarios){
+      sep("Comentarios");
+      lines.push(data.comentarios);
+    }
+
+    const cot = getCotizacionMatch(data);
+    if (cot){
+      sep("Cotización — datos para Comercio Exterior");
+      if (cot.datos && cot.datos.length){
+        lines.push("  Datos necesarios para evaluar la cotización:");
+        bul(cot.datos);
+      }
+      if (cot.incluir && cot.incluir.length){
+        lines.push("");
+        lines.push("  La cotización debe incluir:");
+        bul(cot.incluir);
+      }
+      if (cot.notas){
+        lines.push("");
+        lines.push("  Notas: " + cot.notas);
+      }
+    }
+
+    lines.push("");
+    lines.push("──────────────────────────────────────────");
+    return lines.join("\n");
+  }
+
+  // ── buildSubject ── CAMBIO 11: incluir subrubro ──
+  function buildSubject(data){
+    const rubro = data.rubro || "Producto";
+    const subrubro = data.subrubro ? " – " + data.subrubro : "";
+    const fecha = data.fechaSolicitud ? formatDateISOtoDMY(data.fechaSolicitud) : "";
+    return `Solicitud de búsqueda – ${rubro}${subrubro}${fecha ? " – " + fecha : ""}`;
+  }
+
+  function downloadJson(obj){
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "solicitud_busqueda_producto.json";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function copyToClipboard(text){ return navigator.clipboard.writeText(text); }
+
+  function clearTecSelections(){
+    for (let i=0; i<tecItems.length; i++){
+      const cbDes = document.querySelector(`input[name="tecDes_${i}"]`);
+      const cbObl = document.querySelector(`input[name="tecObl_${i}"]`);
+      if (cbDes) cbDes.checked = false;
+      if (cbObl) cbObl.checked = false;
+    }
+    const colVal = $("#columnaValor");
+    if (colVal) colVal.value = "";
+  }
+
+  // ── Init ──
+  renderObjetivos();
+  refreshTecnologias();
+  clearTecSelections();
+  if ($("#qtyPorColor")) $("#qtyPorColor").value = "";
+  if ($("#qtyPorArticulo")) $("#qtyPorArticulo").value = "";
+
+  // CAMBIO 9: Indistinto por defecto
+  const cbIndistinto = $("#origenIndistinto");
+  if (cbIndistinto) cbIndistinto.checked = true;
+
+  let defaultFechaSolicitudISO = "";
+  let defaultFechaCierreISO = "";
+
+  function toISODateLocal(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function addMonthsLocal(d, months){
+    const y = d.getFullYear(); const m = d.getMonth(); const day = d.getDate();
+    const base = new Date(y, m + months, 1);
+    const lastDay = new Date(base.getFullYear(), base.getMonth()+1, 0).getDate();
+    base.setDate(Math.min(day, lastDay));
+    return base;
+  }
+
+  function computeDefaultDates(){
+    const now = new Date();
+    defaultFechaSolicitudISO = toISODateLocal(now);
+    defaultFechaCierreISO = toISODateLocal(addMonthsLocal(now, 3));
+    $("#fechaSolicitud").value = defaultFechaSolicitudISO;
+    $("#fechaCierre").value = defaultFechaCierreISO;
+  }
+
+  computeDefaultDates();
+
+  // ── Cotización: datos prerelenados por rubro/tipología/clasificación/temporada ──
+  const cotizacionDB = [
+    // ── INDUMENTARIA ──
+    // Campera/Pantalón – Técnico – Invierno
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Pantalón"],
+      clasifs:["Técnico"], temporadas:["Invierno"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Termosellado":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Trampa de nieve","Relleno (y peso)","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:"" },
+    // Campera/Pantalón – Outdoor – Invierno
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Pantalón"],
+      clasifs:["Outdoor"], temporadas:["Invierno"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Termosellado":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Relleno (y peso)","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:"" },
+    // Campera/Chaleco – Matelassé – Invierno
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco"],
+      clasifs:["Matelassé"], temporadas:["Invierno"],
+      reqTec:{"Repelencia":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Repelencia al agua","Relleno (y peso)"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:"" },
+    // Campera/Chaleco – Pluma – Invierno
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco"],
+      clasifs:["Pluma"], temporadas:["Invierno"],
+      reqTec:{"Repelencia":"Obligatorio","Relleno":"Pluma 90/10","RDS":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Repelencia al agua","Relleno (y peso)"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:"" },
+    // Campera/Buzo/Chaleco – Punto/Polar – Invierno/Verano
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Buzo/Polera","Chaleco"],
+      clasifs:["Punto","Polar"], temporadas:["Invierno","Verano"],
+      reqTec:{"Repelencia":"Deseable","Antipilling":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Repelencia al agua","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Camiseta/Pantalón – Térmico – Invierno
+    { rubro:"INDUMENTARIA", tipologias:["Camiseta","Pantalón","Calza"],
+      clasifs:["Térmico"], temporadas:["Invierno"],
+      reqTec:{"Sin costuras":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Caja color 300gr. Matte"],
+      notas:"" },
+    // Campera/Rompeviento – Técnico/Outdoor – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Rompeviento"],
+      clasifs:["Técnico","Outdoor"], temporadas:["Verano"],
+      reqTec:{"Columna de agua":"Deseable","Repelencia":"Obligatorio","Antimosquito":"Deseable","Termosellado":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:"" },
+    // Camisa – Outdoor – Invierno/Verano
+    { rubro:"INDUMENTARIA", tipologias:["Camisa"],
+      clasifs:["Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:{"Protección UV":"Deseable","Antimosquito":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Peso de la tela","Protección UV","Antimosquito"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Pantalón/Short/Bermuda – Outdoor/Urbano – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Pantalón","Short","Bermuda"],
+      clasifs:["Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Deseable","Protección UV":"Deseable","Antimosquito":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Repelencia al agua","Protección UV","Antimosquito"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:"" },
+    // Remera – Urbano – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Remera"],
+      clasifs:["Urbano"], temporadas:["Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Chomba – Urbano – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Chomba"],
+      clasifs:["Urbano"], temporadas:["Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Pantalón/Short/Bermuda – Training – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Pantalón","Short","Bermuda","Babucha"],
+      clasifs:["Training"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Repelencia al agua"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Top/Calza – Training – Verano
+    { rubro:"INDUMENTARIA", tipologias:["Top","Calza"],
+      clasifs:["Training"], temporadas:["Verano"],
+      reqTec:{"Sin costuras":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Peso de la tela"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // ── ACCESORIOS ──
+    // Guantes – Técnico/Outdoor
+    { rubro:"ACCESORIOS", tipologias:["Guantes"],
+      clasifs:["Técnico","Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Termosellado":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Guantes – Urbano
+    { rubro:"ACCESORIOS", tipologias:["Guantes"],
+      clasifs:["Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Gorro/Chall/Bufanda/Cuello – Urbano/Outdoor – Invierno
+    { rubro:"ACCESORIOS", tipologias:["Gorro","Cuello/Chall","Bufanda","Pasamontaña","Manta"],
+      clasifs:["Urbano","Outdoor"], temporadas:["Invierno"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Gorra/Sombrero – Técnico/Outdoor/Urbano – Verano
+    { rubro:"ACCESORIOS", tipologias:["Gorra","Sombrero"],
+      clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:{"Protección UV":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Medias
+    { rubro:"ACCESORIOS", tipologias:["Medias"],
+      clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Lentes/Antiparras/Cinturón
+    { rubro:"ACCESORIOS", tipologias:["Lentes","Antiparras","Cinturón"],
+      clasifs:[], temporadas:[],
+      reqTec:{"Protección UV":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Caja color 300gr. Matte"],
+      notas:"" },
+    // ── EQUIPO OUTDOOR ──
+    // Mochila – Técnico – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mochila"],
+      clasifs:["Técnico"], temporadas:["Verano"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Ataques":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:"" },
+    // Mochila/Riñonera – Urbano/Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mochila","Riñonera"],
+      clasifs:["Urbano","Outdoor"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Obligatorio","Ataques":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Repelencia al agua","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:"" },
+    // Waterbag – Técnico/Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Waterbag"],
+      clasifs:["Técnico","Outdoor"], temporadas:["Verano"],
+      reqTec:{"BPA Free":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Repelencia al agua","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Cartón colgador color"],
+      notas:"" },
+    // Bolso – Técnico/Outdoor/Urbano – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bolso"],
+      clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Obligatorio","Ataques":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Repelencia al agua","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:"" },
+    // Cooler bag – Técnico/Outdoor/Urbano – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Cooler bag"],
+      clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Obligatorio","Ataques":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Repelencia al agua","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:"" },
+    // Termo – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Termo"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Powder coating":"Obligatorio","BPA Free":"Obligatorio","304/304 Acero inoxidable":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Caja color 300gr. Matte"],
+      notas:"" },
+    // Botella – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Botella"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Powder coating":"Obligatorio","BPA Free":"Obligatorio","304/304 Acero inoxidable":"Deseable","304/201 Acero inoxidable":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Caja color 300gr. Matte"],
+      notas:"" },
+    // Carpa/Refugio – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Carpa/Refugio"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Ataques":"Obligatorio","Recubrimiento silver":"Obligatorio","Termosellado":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Columna de agua","Repelencia al agua","Trampa de nieve","Relleno (y peso)","Costuras termoselladas","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Etiqueta colgante: 2 u."],
+      notas:"" },
+    // Bolsa de dormir – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bolsa de dormir"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Obligatorio","Ataques":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Repelencia al agua","Trampa de nieve","Relleno (y peso)","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Bastón – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bastón"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Powder coating":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Trampa de nieve","Relleno (y peso)","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Mat/Colchón/Hamaca – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mat","Colchón","Hamaca"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Trampa de nieve","Relleno (y peso)","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Silla/Banquito/Mueble – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Silla/Banquito","Mueble"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{"Repelencia":"Obligatorio","Powder coating":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Repelencia al agua","Trampa de nieve","Relleno (y peso)","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Etiqueta colgante: 1 u."],
+      notas:"" },
+    // Headlamp/Faroles/Baliza – Outdoor – Verano
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Headlamp","Faroles/Luces","Baliza"],
+      clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:{},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Respirabilidad","Trampa de nieve","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Caja color 300gr. Matte"],
+      notas:"" },
+    // ── CALZADO ──
+    // Zapatilla – Técnico/Outdoor
+    { rubro:"CALZADO", tipologias:["Zapatilla"],
+      clasifs:["Técnico","Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Suelín de caucho":"Deseable","Antideslizante":"Obligatorio","LWG":"Deseable","Fuelle en lengüeta":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Zapatilla – Urbano
+    { rubro:"CALZADO", tipologias:["Zapatilla"],
+      clasifs:["Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:{"Suelín de caucho":"Deseable","Antideslizante":"Obligatorio","LWG":"Deseable","Fuelle en lengüeta":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Bota – Técnico/Outdoor
+    { rubro:"CALZADO", tipologias:["Bota"],
+      clasifs:["Técnico","Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:{"Columna de agua":"Obligatorio","Repelencia":"Obligatorio","Suelín de caucho":"Deseable","Antideslizante":"Obligatorio","LWG":"Deseable","Fuelle en lengüeta":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Bota – Urbano
+    { rubro:"CALZADO", tipologias:["Bota"],
+      clasifs:["Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:{"Suelín de caucho":"Deseable","Antideslizante":"Obligatorio","LWG":"Deseable","Fuelle en lengüeta":"Obligatorio"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares" },
+    // Sandalia – Outdoor/Urbano – Verano
+    { rubro:"CALZADO", tipologias:["Sandalia"],
+      clasifs:["Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:{"Suelín de caucho":"Deseable","Antideslizante":"Obligatorio","LWG":"Deseable"},
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares" }
+  ];
+
+  function normalize(s){ return (s||"").toLowerCase().trim(); }
+
+  function matchEntry(entry, rubro, tipologia, clasif, temporada){
+    if (normalize(entry.rubro) !== normalize(rubro)) return false;
+    const tipMatch = !entry.tipologias.length || entry.tipologias.some(t => normalize(t) === normalize(tipologia));
+    if (!tipMatch) return false;
+    const ctMatch = !entry.clasifs.length || !clasif || entry.clasifs.some(c => normalize(c) === normalize(clasif));
+    if (!ctMatch) return false;
+    const tmpMatch = !entry.temporadas.length || !temporada || entry.temporadas.some(t => normalize(t) === normalize(temporada));
+    return tmpMatch;
+  }
+
+  function updateCotizacion(){
+    const rubro = ($("#rubro").value || "").toUpperCase();
+    const tipologia = $("#subrubro").value || "";
+    const clasif = $("#clasifTecnica").value || "";
+    const temporada = $("#temporada").value || "";
+    const section = document.getElementById("cotizacionSection");
+    if (!rubro || !tipologia){ section.style.display = "none"; return; }
+
+    let match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, temporada));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, clasif, ""));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", temporada));
+    if (!match) match = cotizacionDB.find(e => matchEntry(e, rubro, tipologia, "", ""));
+
+    if (!match){ section.style.display = "none"; return; }
+    section.style.display = "";
+
+    const datosText = match.datos.map(d => "  \u2022 " + d).join("\n");
+    document.getElementById("cotDatos").textContent = datosText;
+
+    document.getElementById("cotIncluir").textContent = match.incluir.map(i => "  \u2022 " + i).join("\n");
+
+    const notasWrap = document.getElementById("cotNotasWrap");
+    if (match.notas){
+      document.getElementById("cotNotas").textContent = match.notas;
+      notasWrap.style.display = "";
+    } else {
+      notasWrap.style.display = "none";
+    }
+  }
+
+    updateSubrubros();
+
+  $("#rubro").addEventListener("change", () => { updateSubrubros(); $("#subrubro").value = ""; $("#clasifTecnica").value = ""; $("#temporada").value = ""; updateArsFobHint(); refreshTecnologias(); updateCotizacion(); });
+  function onSelectionChange(){ updateCotizacion(); refreshTecnologias(); }
+  $("#subrubro").addEventListener("change", () => {
+    const tipologia = $("#subrubro").value;
+    const prevCt = $("#clasifTecnica").value;
+    const prevTmp = $("#temporada").value;
+    updateClasifAndTemp(tipologia, prevCt, prevTmp);
+    onSelectionChange();
+  });
+  $("#clasifTecnica").addEventListener("change", onSelectionChange);
+  $("#temporada").addEventListener("change", onSelectionChange);
+
+  // Defaults automáticos por subrubro – la lógica se maneja en updateCotizacion
+
+  // Contador de "Otro"
+  $("#objetivoOtroTexto").addEventListener("input", () => {
+    $("#otroCount").textContent = String($("#objetivoOtroTexto").value.length);
+  });
+
+  // Origen "Otros"
+  $$('input[name="origen"]').forEach(r => {
+    r.addEventListener("change", () => {
+      const otrosChecked = $$('input[name="origen"]').some(x => x.value === "Otros" && x.checked);
+      $("#origenOtroWrap").style.display = otrosChecked ? "block" : "none";
+      if (!otrosChecked) $("#origenOtroTexto").value = "";
+    });
+  });
+
+  // Cargar USD y actualizar hint
+  fetchUsdOficial().then(updateArsFobHint);
+  $("#moneda").addEventListener("change", updateArsFobHint);
+  $("#precioMax").addEventListener("input", updateArsFobHint);
+
+  // ── Toast ──
+  let toastTimer = null;
+  function showToast(msg, type="ok"){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "show toast-" + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = ""; }, 3000);
+  }
+
+  // ── Validación ──
+  function validateForm(){
+    const fd = new FormData(document.getElementById("form"));
+    const errors = [];
+
+    if (!fd.get("fechaSolicitud")) errors.push("Fecha de solicitud es requerida.");
+    if (!fd.get("fechaCierre"))    errors.push("Fecha de cierre es requerida.");
+    if (!fd.get("prioridad"))      errors.push("Nivel de prioridad es requerido.");
+    if (!fd.get("rubro"))          errors.push("Rubro / Tipología es requerido.");
+    if (fd.get("rubro") && (!fd.get("subrubro") || document.getElementById("subrubro").disabled))
+                                   errors.push("Tipología es requerida.");
+
+    // Género
+    if (!fd.getAll("genero").length) errors.push("Género es requerido.");
+
+    // Objetivos: al menos uno que no sea "No requerido"
+    const anyObjSel = Array.from(document.querySelectorAll("#objetivosBody tr[data-key]")).some(tr => {
+      const cbs = tr.querySelectorAll('input[type="checkbox"]');
+      return (cbs[0] && cbs[0].checked) || (cbs[1] && cbs[1].checked);
+    });
+    if (!anyObjSel) errors.push("Objetivo de la búsqueda: al menos uno debe ser Deseable o Excluyente.");
+
+    // Target price
+    if (!fd.get("precioMax")) errors.push("Target price MÁXIMO es requerido.");
+    if (!fd.getAll("targetPriceTipo").length) errors.push("Target price: seleccioná al menos una opción.");
+
+    const banner = document.getElementById("validationBanner");
+    const list   = document.getElementById("validationList");
+    if (errors.length){
+      list.innerHTML = errors.map(e => `<li>${e}</li>`).join("");
+      banner.style.display = "block";
+      banner.scrollIntoView({ behavior:"smooth", block:"center" });
+      document.getElementById("rubro").classList.toggle("field-error", !fd.get("rubro"));
+      document.getElementById("subrubro").classList.toggle("field-error", !fd.get("subrubro") && !document.getElementById("subrubro").disabled && !!fd.get("rubro"));
+      document.getElementById("fechaSolicitud").classList.toggle("field-error", !fd.get("fechaSolicitud"));
+      document.getElementById("fechaCierre").classList.toggle("field-error", !fd.get("fechaCierre"));
+      document.getElementById("precioMax").classList.toggle("field-error", !fd.get("precioMax"));
+      return false;
+    } else {
+      banner.style.display = "none";
+      ["rubro","subrubro","fechaSolicitud","fechaCierre","precioMax"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove("field-error");
+      });
+      return true;
+    }
+  }
+
+  // Limpiar error de campo al cambiarlo
+  ["rubro","subrubro","fechaSolicitud"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", () => { el.classList.remove("field-error"); });
+  });
+
+  // ── Autoguardado ──
+  let autoSaveTimer = null;
+  function scheduleAutoSave(){
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+      if (isLoading) return;
+      const data = formToObject();
+      localStorage.setItem("solicitud_busqueda_producto", JSON.stringify(data));
+      setStatus("Guardado automáticamente.", true);
+    }, 1200);
+  }
+  document.getElementById("form").addEventListener("input", scheduleAutoSave);
+  document.getElementById("form").addEventListener("change", scheduleAutoSave);
+
+  // ── Guardar / Cargar ──
+  document.getElementById("btnSave").addEventListener("click", () => {
+    const data = formToObject();
+    localStorage.setItem("solicitud_busqueda_producto", JSON.stringify(data));
+    showToast("💾 Guardado en este navegador.", "ok");
+    setStatus("Guardado.", true);
+  });
+
+  document.getElementById("btnLoad").addEventListener("click", () => {
+    const raw = localStorage.getItem("solicitud_busqueda_producto");
+    if (!raw){ showToast("No hay datos guardados aún.", "warn"); return; }
+
+    // Confirmar si el formulario tiene datos
+    const fd = new FormData(document.getElementById("form"));
+    const hasDatos = fd.get("rubro") || fd.get("articulosRef") || fd.get("precioMax");
+    if (hasDatos && !confirm("⚠️ Tenés datos cargados en el formulario. ¿Querés sobreescribirlos con los datos guardados?")) return;
+
+    isLoading = true;
+    const data = JSON.parse(raw);
+
+    document.getElementById("fechaSolicitud").value = data.fechaSolicitud || defaultFechaSolicitudISO;
+    document.getElementById("fechaCierre").value = data.fechaCierre || defaultFechaCierreISO;
+
+    // Prioridad
+    document.querySelectorAll('input[name="prioridad"]').forEach(r => {
+      r.checked = (r.value === data.prioridad);
+      if (r.checked) r.dispatchEvent(new Event("change"));
+    });
+
+    document.getElementById("rubro").value = data.rubro || "";
+  
+  // ── Cotización: datos prerelenados por rubro/tipología/clasificación/temporada ──
+  const cotizacionDB = [
+    // INDUMENTARIA
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco","Piloto"], clasifs:["Técnico"], temporadas:["Invierno"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Termosellado: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Trampa de nieve","Costuras termoselladas","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco","Piloto"], clasifs:["Outdoor"], temporadas:["Invierno"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Termosellado: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Trampa de nieve","Costuras termoselladas","Peso de la tela","Título de hilado"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco"], clasifs:["Matelassé"], temporadas:["Invierno"],
+      reqTec:["Repelencia: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Repelencia al agua","Costuras termoselladas","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Chaleco"], clasifs:["Pluma"], temporadas:["Invierno"],
+      reqTec:["Repelencia: Obligatorio","Relleno: Pluma 90/10","RDS: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Repelencia al agua","Costuras termoselladas","Peso de la tela"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Buzo/Polera","Chaleco"], clasifs:["Punto","Polar"], temporadas:["Invierno","Verano"],
+      reqTec:["Repelencia: Deseable","Antipilling: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Repelencia al agua","Costuras termoselladas","Peso de la tela","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Camiseta","Pantalón","Calza"], clasifs:["Térmico"], temporadas:["Invierno"],
+      reqTec:["Sin costuras: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Peso de la tela","Título de hilado","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u."],
+      notas:"Caja color 300gr. Matte"
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Campera","Rompeviento"], clasifs:["Técnico","Outdoor"], temporadas:["Verano"],
+      reqTec:["Columna de agua: Deseable","Repelencia: Obligatorio","Antimosquito: Deseable","Termosellado: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Costuras termoselladas","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 3 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Camisa"], clasifs:["Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:["Protección UV: Deseable","Antimosquito: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Protección UV"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Pantalón","Short","Bermuda"], clasifs:["Outdoor","Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:["Repelencia: Deseable","Protección UV: Deseable","Antimosquito: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Repelencia al agua","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Remera","Chomba"], clasifs:["Urbano"], temporadas:["Verano"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Protección UV"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Pantalón","Short","Bermuda"], clasifs:["Training"], temporadas:["Verano"],
+      reqTec:["Repelencia: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Repelencia al agua","Costuras termoselladas"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"INDUMENTARIA", tipologias:["Top","Calza"], clasifs:["Training"], temporadas:["Verano"],
+      reqTec:["Sin costuras: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Protección UV"],
+      incluir:["Sticker código de barras: 2 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    // ACCESORIOS
+    { rubro:"ACCESORIOS", tipologias:["Guantes"], clasifs:["Técnico","Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Termosellado: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Columna de agua","Respirabilidad","Repelencia al agua","Costuras termoselladas","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares"
+    },
+    { rubro:"ACCESORIOS", tipologias:["Guantes"], clasifs:["Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares"
+    },
+    { rubro:"ACCESORIOS", tipologias:["Gorro","Cuello/Chall","Bufanda"], clasifs:["Urbano","Outdoor"], temporadas:["Invierno"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"ACCESORIOS", tipologias:["Gorra","Sombrero"], clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:["Protección UV: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"ACCESORIOS", tipologias:["Medias"], clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Cartón colgador color"],
+      notas:"Las muestras se deben pedir en pares"
+    },
+    { rubro:"ACCESORIOS", tipologias:["Lentes","Antiparras"], clasifs:[], temporadas:[],
+      reqTec:["Protección UV: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Etiqueta colgante: 1 u.","Caja color 300gr. Matte"],
+      notas:""
+    },
+    // EQUIPO OUTDOOR
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mochila"], clasifs:["Técnico"], temporadas:["Verano"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Ataques: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Columna de agua","Capacidad / Volumen","Repelencia al agua","Medidas abierto","Medidas empacado","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mochila","Riñonera"], clasifs:["Urbano","Outdoor"], temporadas:["Verano"],
+      reqTec:["Repelencia: Obligatorio","Ataques: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Medidas abierto","Medidas empacado","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 4 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Waterbag"], clasifs:["Técnico","Outdoor"], temporadas:["Verano"],
+      reqTec:["BPA Free: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Medidas abierto","Medidas empacado","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Cartón colgador color"],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bolso"], clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:["Repelencia: Obligatorio","Ataques: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Medidas abierto","Medidas empacado","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Cooler bag"], clasifs:["Técnico","Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:["Repelencia: Obligatorio","Ataques: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Medidas abierto","Medidas empacado","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 2 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Termo"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Powder coating: Obligatorio","BPA Free: Obligatorio","304/304 Acero inoxidable: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Caja color 300gr. Matte"],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Botella"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Powder coating: Obligatorio","BPA Free: Obligatorio","304/201 Acero inoxidable: Obligatorio","304/304 Acero inoxidable: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Caja color 300gr. Matte"],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Carpa/Refugio"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Ataques: Obligatorio","Recubrimiento silver: Obligatorio","Termosellado: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Columna de agua","Capacidad / Volumen","Repelencia al agua","Medidas abierto","Medidas empacado","Costuras termoselladas","Peso","Diámetro y espesor de la estructura","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Etiqueta colgante: 2 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bolsa de dormir"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Repelencia: Obligatorio","Ataques: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Repelencia al agua","Medidas empacado","Costuras termoselladas","Peso","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Bastón"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Powder coating: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Peso","Diámetro y espesor de la estructura","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Bolsa plástica con logo: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Mat","Colchón"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Peso","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Silla/Banquito","Mueble"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:["Repelencia: Obligatorio","Powder coating: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Medidas empacado","Peso","Diámetro y espesor de la estructura","Protección UV"],
+      incluir:["Sticker código de barras: 1 u.","Fasco: 3 u.","Etiqueta colgante: 1 u."],
+      notas:""
+    },
+    { rubro:"EQUIPO OUTDOOR", tipologias:["Headlamp","Faroles/Luces","Baliza"], clasifs:["Outdoor"], temporadas:["Verano"],
+      reqTec:[],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color y orden","Composición","Descripción de características","Capacidad / Volumen","Peso"],
+      incluir:["Sticker código de barras: 1 u.","Caja color 300gr. Matte"],
+      notas:""
+    },
+    // CALZADO
+    { rubro:"CALZADO", tipologias:["Zapatilla","Bota"], clasifs:["Técnico","Outdoor"], temporadas:["Invierno","Verano"],
+      reqTec:["Columna de agua: Obligatorio","Repelencia: Obligatorio","Suelín de caucho: Deseable","Antideslizante: Obligatorio","LWG: Deseable","Fuelle en lengüeta: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Dumping (si lleva y cuánto paga)","Composición","Descripción de características","Columna","Respirabilidad","Repelencia"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares"
+    },
+    { rubro:"CALZADO", tipologias:["Zapatilla","Bota"], clasifs:["Urbano"], temporadas:["Invierno","Verano"],
+      reqTec:["Suelín de caucho: Deseable","Antideslizante: Obligatorio","LWG: Deseable","Fuelle en lengüeta: Obligatorio"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Dumping (si lleva y cuánto paga)","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares"
+    },
+    { rubro:"CALZADO", tipologias:["Sandalia"], clasifs:["Outdoor","Urbano"], temporadas:["Verano"],
+      reqTec:["Suelín de caucho: Deseable","Antideslizante: Obligatorio","LWG: Deseable"],
+      datos:["Origen","Precio FOB","Mínimos por modelo, color, talle y orden","Dumping (si lleva y cuánto paga)","Composición","Descripción de características"],
+      incluir:["Sticker código de barras: 2 u.","Papel: 1 u.","Transfer de talle: 1 u.","Etiqueta colgante: 2 u.","Caja papel reciclable"],
+      notas:"Las muestras se deben pedir en pares"
+    }
+  ];
+
+  function normalize(s){ return (s||"").toLowerCase().trim(); }
+
+  function matchEntry(entry, rubro, tipologia, clasif, temporada){
+    if (normalize(entry.rubro) !== normalize(rubro)) return false;
+    const tipMatch = !entry.tipologias.length || entry.tipologias.some(t => normalize(t) === normalize(tipologia));
+    if (!tipMatch) return false;
+    const ctMatch = !entry.clasifs.length || !clasif || entry.clasifs.some(c => normalize(c) === normalize(clasif));
+    if (!ctMatch) return false;
+    const tmpMatch = !entry.temporadas.length || !temporada || entry.temporadas.some(t => normalize(t) === normalize(temporada));
+    return tmpMatch;
+  }
+
+    updateSubrubros();
+    document.getElementById("subrubro").value = data.subrubro || "";
+    // Restore clasif/temp options filtered by tipologia
+    if (data.subrubro) updateClasifAndTemp(data.subrubro, data.clasifTecnica || "", data.temporada || "");
+    else {
+      document.getElementById("clasifTecnica").value = data.clasifTecnica || "";
+      document.getElementById("temporada").value = data.temporada || "";
+    }
+    updateCotizacion();
+    refreshTecnologias();
+
+    const genArr = Array.isArray(data.genero) ? data.genero : [];
+    document.querySelectorAll('input[name="genero"]').forEach(cb => cb.checked = genArr.indexOf(cb.value) !== -1);
+    document.getElementById("articulosRef").value = data.articulosRef || "";
+
+    document.querySelectorAll("#objetivosBody tr[data-key]").forEach(tr => {
+      const key = tr.getAttribute("data-key");
+      const cbs = tr.querySelectorAll('input[type="checkbox"]');
+      const des = cbs[0]; const ex = cbs[1];
+      const found = (data.objetivos || []).find(o => o.objetivo === key);
+      if (found){ ex.checked = !!found.excluyente; des.checked = !!found.deseable; }
+      else { ex.checked = false; des.checked = false; }
+      if (key.indexOf("Otro") === 0){
+        const show = des.checked || ex.checked;
+        document.getElementById("otroWrap").style.display = show ? "block" : "none";
+        document.getElementById("objetivoOtroTexto").value = show ? (data.objetivoOtroTexto || "") : "";
+        document.getElementById("otroCount").textContent = String(document.getElementById("objetivoOtroTexto").value.length);
+      }
+    });
+
+    document.getElementById("moneda").value = (data.targetPrice && data.targetPrice.moneda) ? data.targetPrice.moneda : "USD (FOB)";
+    document.getElementById("precioMax").value = (data.targetPrice && data.targetPrice.precioMax) ? data.targetPrice.precioMax : "";
+    fetchUsdOficial().then(updateArsFobHint);
+
+    const tipoArr = (data.targetPrice && Array.isArray(data.targetPrice.tipo)) ? data.targetPrice.tipo : [];
+    document.querySelectorAll('input[name="targetPriceTipo"]').forEach(cb => {
+      cb.checked = tipoArr.indexOf(cb.value) !== -1;
+      if (cb.id === "cbFlexArriba") document.getElementById("flexArribaExtra").style.display = cb.checked ? "block" : "none";
+    });
+    if (data.targetPrice && data.targetPrice.flexArribaCuanto) document.getElementById("flexArribaCuanto").value = data.targetPrice.flexArribaCuanto;
+
+    document.getElementById("tecAclaraciones").value = data.tecnologiasAclaraciones || "";
+    document.getElementById("materialidad").value = data.materialidad || "";
+    const tecArr = Array.isArray(data.tecnologias) ? data.tecnologias : [];
+    tecItems.forEach((tec, idx) => {
+      const found = tecArr.find(t => t.item === tec.label || t.item === tec.key) || {};
+      const cbDes = document.querySelector(`input[name="tecDes_${idx}"]`);
+      const cbObl = document.querySelector(`input[name="tecObl_${idx}"]`);
+      if (cbDes) cbDes.checked = !!found.deseable;
+      if (cbObl) cbObl.checked = !!found.obligatorio;
+    });
+    const colVal = document.getElementById("columnaValor");
+    if (colVal) colVal.value = data.columnaValor || "";
+
+    const oriArr = Array.isArray(data.origen) ? data.origen : [];
+    document.querySelectorAll('input[name="origen"]').forEach(r => r.checked = oriArr.indexOf(r.value) !== -1);
+    const showOtros = oriArr.indexOf("Otros") !== -1;
+    document.getElementById("origenOtroWrap").style.display = showOtros ? "block" : "none";
+    document.getElementById("origenOtroTexto").value = showOtros ? (data.origenOtroTexto || "") : "";
+
+    document.getElementById("qtyPorColor").value = data.cantidades && data.cantidades.porColor ? data.cantidades.porColor : "";
+    document.getElementById("qtyPorArticulo").value = data.cantidades && data.cantidades.porArticulo ? data.cantidades.porArticulo : "";
+
+    document.getElementById("proveedor").value = data.proveedor || "";
+    const mf = document.getElementById("muestraFisica");
+    if (mf) mf.checked = (data.muestraFisica === "Sí");
+    document.getElementById("adjuntoDesc").value = data.adjuntoDesc || "";
+    document.getElementById("comentarios").value = data.comentarios || "";
+
+    isLoading = false;
+    showToast("📂 Datos cargados correctamente.", "ok");
+    setStatus("Datos cargados.", true);
+  });
+
+  document.getElementById("btnCopy").addEventListener("click", async () => {
+    const data = formToObject();
+    const summary = buildSummaryPlain(data);
+    try {
+      await copyToClipboard(summary);
+      showToast("📋 Resumen copiado al portapapeles.", "ok");
+      setStatus("Resumen copiado.", true);
+    } catch (e) {
+      document.getElementById("output").innerHTML = buildSummary(data);
+      document.getElementById("outputWrap").style.display = "block";
+      showToast("No se pudo copiar. Copiá del resumen.", "warn");
+    }
+  });
+
+
+  document.getElementById("btnSend").addEventListener("click", () => {
+    if (!validateForm()) { showToast("⚠️ Completá los campos requeridos.", "warn"); return; }
+    const data = formToObject();
+    const summary = buildSummaryPlain(data);
+    const subject = buildSubject(data);
+    const to = "disegno12@montagne.com.ar";
+    const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary)}`;
+    window.location.href = mailto;
+    showToast("✉️ Se abrió tu correo.", "ok");
+    setStatus("Se abrió tu correo con el resumen listo para enviar.", true);
+  });
+
+  // ── Tooltip referencia de precio ──
+  const refHelpBtn = document.getElementById("refPrecioHelp");
+  const refTooltip = document.getElementById("refPrecioTooltip");
+  if (refHelpBtn && refTooltip){
+    refHelpBtn.addEventListener("click", () => {
+      refTooltip.style.display = refTooltip.style.display === "none" ? "block" : "none";
+    });
+  }
+
+  document.getElementById("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!validateForm()) { showToast("⚠️ Completá los campos requeridos.", "warn"); return; }
+    const data = formToObject();
+    const summary = buildSummary(data);
+    document.getElementById("output").innerHTML = buildSummary(data);
+    document.getElementById("outputWrap").style.display = "block";
+    document.getElementById("submitStatus").textContent = "Resumen generado. Podés copiarlo o descargar el JSON.";
+    showToast("✅ Resumen generado.", "ok");
+    setStatus("Resumen actualizado.", true);
+  });
+
+</script>
+</body>
+</html>
